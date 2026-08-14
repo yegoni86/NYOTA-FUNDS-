@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,7 +18,6 @@
 body{
     min-height:100vh;
     padding:20px;
-
     display:flex;
     justify-content:center;
     align-items:center;
@@ -65,7 +63,6 @@ body{
 }
 
 @keyframes appear{
-
     from{
         opacity:0;
         transform:translateY(25px) scale(.98);
@@ -75,7 +72,6 @@ body{
         opacity:1;
         transform:translateY(0) scale(1);
     }
-
 }
 
 
@@ -91,12 +87,14 @@ body{
 
 .hero img{
     width:100%;
-    height:220px;
-
+    height:auto;
     display:block;
 
-    object-fit:cover;
-    object-position:center;
+    /*
+       The image is NOT cropped.
+       Its original proportions are preserved.
+    */
+    object-fit:contain;
 }
 
 
@@ -158,32 +156,25 @@ body{
 
 .header h1{
     position:relative;
-
     z-index:1;
 
     font-size:30px;
-
     font-weight:900;
-
     letter-spacing:.7px;
 }
 
 .subtitle{
     position:relative;
-
     z-index:1;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
     gap:14px;
-
     margin-top:8px;
 
     font-size:15px;
-
     font-weight:600;
 
     opacity:.95;
@@ -214,7 +205,6 @@ body{
 
 .welcome{
     text-align:center;
-
     margin-bottom:26px;
 }
 
@@ -222,7 +212,6 @@ body{
     color:#087f32;
 
     font-size:31px;
-
     font-weight:800;
 
     margin-bottom:8px;
@@ -230,17 +219,13 @@ body{
 
 .welcome h2::before{
     content:"✦";
-
     color:#f5bd00;
-
     margin-right:9px;
 }
 
 .welcome h2::after{
     content:"✦";
-
     color:#f5bd00;
-
     margin-left:9px;
 }
 
@@ -248,11 +233,9 @@ body{
     color:#64748b;
 
     font-size:15px;
-
     line-height:1.7;
 
     max-width:500px;
-
     margin:auto;
 }
 
@@ -263,13 +246,11 @@ body{
 
 .notice{
     display:flex;
-
     align-items:center;
 
     gap:16px;
 
     padding:18px;
-
     margin-bottom:24px;
 
     border-radius:17px;
@@ -282,7 +263,6 @@ body{
         );
 
     border:1px solid #bbf7d0;
-
     border-left:5px solid #16a34a;
 
     box-shadow:
@@ -292,11 +272,9 @@ body{
 .notice-icon{
     width:52px;
     height:52px;
-
     min-width:52px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -311,7 +289,6 @@ body{
     color:#087f32;
 
     font-size:17px;
-
     margin-bottom:4px;
 }
 
@@ -319,7 +296,6 @@ body{
     color:#526174;
 
     font-size:13px;
-
     line-height:1.5;
 }
 
@@ -330,7 +306,6 @@ body{
 
 .steps{
     display:flex;
-
     flex-direction:column;
 
     gap:12px;
@@ -340,7 +315,6 @@ body{
 
 .step{
     display:flex;
-
     align-items:center;
 
     gap:13px;
@@ -380,7 +354,6 @@ body{
     min-width:45px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -389,7 +362,6 @@ body{
     color:white;
 
     font-size:18px;
-
     font-weight:800;
 
     box-shadow:
@@ -430,7 +402,6 @@ body{
 
 .step-icon{
     width:45px;
-
     min-width:45px;
 
     text-align:center;
@@ -449,7 +420,6 @@ body{
     color:#1e293b;
 
     font-size:14px;
-
     font-weight:650;
 
     line-height:1.45;
@@ -467,32 +437,27 @@ body{
     min-width:34px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
     border-radius:50%;
 
     font-size:25px;
-
     font-weight:400;
 }
 
 .arrow-green{
     color:#15803d;
-
     background:#ecfdf5;
 }
 
 .arrow-blue{
     color:#2563eb;
-
     background:#eff6ff;
 }
 
 .arrow-yellow{
     color:#d97706;
-
     background:#fffbeb;
 }
 
@@ -522,7 +487,6 @@ body{
         );
 
     font-size:18px;
-
     font-weight:800;
 
     cursor:pointer;
@@ -597,40 +561,32 @@ body{
 
 
 /* =========================
-   MOBILE PHONE
+   MOBILE
 ========================= */
 
 @media(max-width:600px){
 
     body{
         padding:6px;
-
         align-items:flex-start;
-
         padding-top:8px;
     }
 
     .container{
         width:100%;
-
         max-width:100%;
-
         border-radius:20px;
     }
 
-
-    /* Smaller image on phone */
+    /*
+       Full image remains visible on mobile too.
+    */
 
     .hero img{
         width:100%;
-
-        height:150px;
-
-        object-fit:cover;
-
-        object-position:center;
+        height:auto;
+        display:block;
     }
-
 
     .header{
         padding:20px 12px;
@@ -642,7 +598,6 @@ body{
 
     .subtitle{
         font-size:12px;
-
         gap:8px;
     }
 
@@ -650,11 +605,9 @@ body{
         width:38px;
     }
 
-
     .content{
         padding:19px 14px;
     }
-
 
     .welcome{
         margin-bottom:20px;
@@ -666,25 +619,19 @@ body{
 
     .welcome p{
         font-size:13px;
-
         line-height:1.55;
     }
 
-
     .notice{
         padding:12px;
-
         gap:10px;
-
         margin-bottom:18px;
     }
 
     .notice-icon{
         width:40px;
         height:40px;
-
         min-width:40px;
-
         font-size:19px;
     }
 
@@ -696,76 +643,53 @@ body{
         font-size:11px;
     }
 
-
     .steps{
         gap:9px;
-
         margin-bottom:20px;
     }
 
-
     .step{
         padding:10px 8px;
-
         gap:7px;
-
         border-radius:14px;
     }
-
 
     .number{
         width:37px;
         height:37px;
-
         min-width:37px;
-
         font-size:15px;
-
         border-radius:11px;
     }
 
-
     .step-icon{
         width:32px;
-
         min-width:32px;
-
         font-size:21px;
     }
 
-
     .step-text{
         font-size:11px;
-
         line-height:1.35;
     }
-
 
     .arrow{
         width:28px;
         height:28px;
-
         min-width:28px;
-
         font-size:20px;
     }
 
-
     .start{
         padding:15px;
-
         font-size:16px;
-
         border-radius:14px;
     }
 
-
     .footer{
         padding:13px;
-
         font-size:11px;
     }
-
 }
 
 
@@ -776,7 +700,8 @@ body{
 @media(max-width:380px){
 
     .hero img{
-        height:130px;
+        width:100%;
+        height:auto;
     }
 
     .content{
@@ -802,17 +727,13 @@ body{
     .number{
         width:34px;
         height:34px;
-
         min-width:34px;
-
         font-size:14px;
     }
 
     .step-icon{
         width:28px;
-
         min-width:28px;
-
         font-size:19px;
     }
 
@@ -823,28 +744,21 @@ body{
     .arrow{
         width:25px;
         height:25px;
-
         min-width:25px;
-
         font-size:18px;
     }
-
 }
 
 </style>
-
 </head>
 
 
 <body>
 
-
 <div class="container">
 
 
-    <!-- =========================
-         NYOTA IMAGE
-    ========================== -->
+    <!-- NYOTA IMAGE -->
 
     <div class="hero">
 
@@ -856,9 +770,7 @@ body{
     </div>
 
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+    <!-- HEADER -->
 
     <div class="header">
 
@@ -881,9 +793,7 @@ body{
     </div>
 
 
-    <!-- =========================
-         CONTENT
-    ========================== -->
+    <!-- CONTENT -->
 
     <div class="content">
 
@@ -928,14 +838,10 @@ body{
         </div>
 
 
-        <!-- =========================
-             APPLICATION STEPS
-        ========================== -->
+        <!-- APPLICATION STEPS -->
 
         <div class="steps">
 
-
-            <!-- STEP 1 -->
 
             <div class="step">
 
@@ -958,8 +864,6 @@ body{
             </div>
 
 
-            <!-- STEP 2 -->
-
             <div class="step">
 
                 <div class="number blue">
@@ -981,8 +885,6 @@ body{
 
             </div>
 
-
-            <!-- STEP 3 -->
 
             <div class="step">
 
@@ -1007,9 +909,7 @@ body{
         </div>
 
 
-        <!-- =========================
-             START APPLICATION
-        ========================== -->
+        <!-- START APPLICATION -->
 
         <button
             class="start"
@@ -1027,9 +927,7 @@ body{
     </div>
 
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+    <!-- FOOTER -->
 
     <div class="footer">
 
@@ -1056,7 +954,6 @@ function startApplication(){
 }
 
 </script>
-
 
 </body>
 </html>
