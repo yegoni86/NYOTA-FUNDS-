@@ -1,1 +1,218 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NYOTA Fund Kenya - Step 1</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0B7A2F,#2563EB);
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+
+.header{
+background:linear-gradient(135deg,#0B7A2F,#2563EB);
+color:#fff;
+text-align:center;
+padding:30px;
+}
+
+.header h1{
+font-size:30px;
+margin-bottom:10px;
+}
+
+.content{
+padding:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:18px;
+}
+
+.full{
+grid-column:1/-1;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+font-weight:bold;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:15px;
+}
+
+input:focus,
+select:focus{
+outline:none;
+border-color:#2563EB;
+}
+
+button{
+width:100%;
+padding:16px;
+margin-top:25px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#2563EB,#1D4ED8);
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.95;
+}
+
+.footer{
+text-align:center;
+padding:20px;
+color:#0B7A2F;
+font-weight:bold;
+}
+
+@media(max-width:700px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>🇰🇪 NYOTA FUND KENYA</h1>
+<p>Phase 2 Application - Step 1</p>
+</div>
+
+<div class="content">
+
+<form id="applicationForm">
+
+<div class="grid">
+
+<div class="full">
+<label>👤 Full Name *</label>
+<input type="text" name="fullname" placeholder="Jane Wanjiku Kamau" required>
+</div>
+
+<div>
+<label>📞 Phone Number *</label>
+<input type="tel" name="phone" placeholder="0712345678" required>
+</div>
+
+<div>
+<label>🪪 National ID *</label>
+<input type="text" name="national_id" placeholder="12345678" required>
+</div>
+
+<div>
+<label>🎂 Age *</label>
+<input type="number" name="age" min="18" required>
+</div>
+
+<div>
+<label>💼 Occupation *</label>
+<input type="text" name="occupation" required>
+</div>
+
+<div>
+<label>🌍 County *</label>
+<select name="county" required>
+<option value="">Select County</option>
+<option>Nairobi</option>
+<option>Kiambu</option>
+<option>Nakuru</option>
+<option>Kisumu</option>
+<option>Mombasa</option>
+<option>Kericho</option>
+<option>Bomet</option>
+<option>Nandi</option>
+<option>Uasin Gishu</option>
+<option>Other County</option>
+</select>
+</div>
+
+<div class="full">
+<label>📢 Where did you hear about NYOTA?</label>
+<select name="source" required>
+<option value="">Select</option>
+<option>President William Ruto</option>
+<option>Facebook</option>
+<option>WhatsApp</option>
+<option>X (Twitter)</option>
+<option>Friend / Family</option>
+<option>Radio / TV</option>
+<option>Newspaper</option>
+<option>Other</option>
+</select>
+</div>
+
+</div>
+
+<button type="submit">
+🚀 Continue to Step 2
+</button>
+
+</form>
+
+</div>
+
+<div class="footer">
+🇰🇪 NYOTA FUND KENYA
+</div>
+
+</div>
+
+<script>
+
+document.getElementById("applicationForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+localStorage.setItem("fullname",this.fullname.value);
+localStorage.setItem("phone",this.phone.value);
+localStorage.setItem("national_id",this.national_id.value);
+localStorage.setItem("age",this.age.value);
+localStorage.setItem("occupation",this.occupation.value);
+localStorage.setItem("county",this.county.value);
+localStorage.setItem("source",this.source.value);
+
+window.location.href="page2.html";
+
+});
+
+</script>
+
+</body>
+</html>
