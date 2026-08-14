@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Application - Step 2</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0B7A2F, #2563EB);
+    padding: 20px;
+}
+
+.container {
+    max-width: 750px;
+    margin: auto;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,.25);
+}
+
+.header {
+    background: linear-gradient(135deg, #0B7A2F, #2563EB);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.progress {
+    height: 10px;
+    background: rgba(255,255,255,.3);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 18px 0 12px;
+}
+
+.progress-fill {
+    width: 66.66%;
+    height: 100%;
+    background: white;
+}
+
+.content {
+    padding: 30px;
+}
+
+.notice {
+    background: #EFF6FF;
+    border-left: 5px solid #2563EB;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.card {
+    background: #F8FAFC;
+    border-left: 5px solid #16A34A;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.card h2 {
+    color: #0B7A2F;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: #4B5563;
+    margin-bottom: 20px;
+}
+
+/* APPLICATION SUMMARY */
+
+.summary {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.summary-title {
+    background: #F0FDF4;
+    color: #166534;
+    font-weight: bold;
+    padding: 15px;
+    font-size: 18px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 13px 15px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.summary-value {
+    color: #111827;
+    text-align: right;
+    word-break: break-word;
+}
+
+/* PURPOSE OPTIONS */
+
+.option {
+    display: block;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.option input {
+    display: none;
+}
+
+.option-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    transition: .2s;
+}
+
+.option-content:hover {
+    border-color: #2563EB;
+    background: #EFF6FF;
+}
+
+.option input:checked + .option-content {
+    border-color: #2563EB;
+    background: #EFF6FF;
+    box-shadow: 0 0 0 2px rgba(37,99,235,.1);
+}
+
+.icon {
+    font-size: 25px;
+    width: 35px;
+}
+
+.option-text {
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.option-description {
+    display: block;
+    font-size: 13px;
+    font-weight: normal;
+    color: #6B7280;
+    margin-top: 3px;
+}
+
+/* SELECTED PURPOSE */
+
+.purpose-preview {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #EFF6FF;
+    border-left: 5px solid #2563EB;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+/* CONFIRMATION */
+
+.confirmation {
+    margin-top: 25px;
+    padding: 18px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+}
+
+.confirmation label {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.confirmation input {
+    margin-top: 4px;
+    width: 17px;
+    height: 17px;
+}
+
+/* BUTTONS */
+
+button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #2563EB;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background: #1D4ED8;
+}
+
+.back-button {
+    background: #6B7280;
+    margin-top: 12px;
+}
+
+.back-button:hover {
+    background: #4B5563;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+@media(max-width:600px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .header {
+        padding: 25px 15px;
+    }
+
+    .header h1 {
+        font-size: 23px;
+    }
+
+    .summary-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .summary-value {
+        text-align: left;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>🇰🇪 APPLICATION</h1>
+
+        <p>Application Summary & Purpose</p>
+
+        <div class="progress">
+            <div class="progress-fill"></div>
+        </div>
+
+        <p>Step 2 of 3</p>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="content">
+
+        <div class="notice">
+
+            <strong>📋 Application Summary</strong><br>
+
+            Please review the information below and select the
+            main purpose of the funds before continuing.
+
+        </div>
+
+
+        <!-- APPLICATION SUMMARY -->
+
+        <div class="card">
+
+            <h2>👤 Applicant Information</h2>
+
+            <div class="summary">
+
+                <div class="summary-title">
+                    Application Details
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Name</span>
+                    <span class="summary-value" id="fullname">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Phone</span>
+                    <span class="summary-value" id="phone">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">National ID</span>
+                    <span class="summary-value" id="national_id">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Age</span>
+                    <span class="summary-value" id="age">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Occupation</span>
+                    <span class="summary-value" id="occupation">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">County</span>
+                    <span class="summary-value" id="county">
+                        Not provided
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Source</span>
+                    <span class="summary-value" id="source">
+                        Not provided
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PURPOSE OF FUNDS -->
+
+        <div class="card">
+
+            <h2>💰 Purpose of Funds</h2>
+
+            <p>
+                Select the main purpose for which the funds will be used.
+            </p>
+
+
+            <!-- BUSINESS -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Business"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🏪</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Business
+                        </span>
+
+                        <span class="option-description">
+                            Starting, expanding, or supporting a business.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- EDUCATION -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Education"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🎓</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Education
+                        </span>
+
+                        <span class="option-description">
+                            School fees, training, or education expenses.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- AGRICULTURE -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Agriculture"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🌱</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Agriculture
+                        </span>
+
+                        <span class="option-description">
+                            Farming, livestock, or agricultural activities.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- MEDICAL -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Medical Expenses"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🏥</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Medical Expenses
+                        </span>
+
+                        <span class="option-description">
+                            Healthcare, treatment, or medication expenses.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- HOUSING -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Housing"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🏠</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Housing
+                        </span>
+
+                        <span class="option-description">
+                            Rent, accommodation, or housing improvements.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- EMERGENCY -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Emergency Expenses"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🚨</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Emergency Expenses
+                        </span>
+
+                        <span class="option-description">
+                            Unexpected or urgent financial needs.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- HOUSEHOLD -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Household Needs"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">🏡</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Household Needs
+                        </span>
+
+                        <span class="option-description">
+                            General household and family expenses.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- DEBT -->
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="purpose"
+                    value="Debt Repayment"
+                >
+
+                <span class="option-content">
+
+                    <span class="icon">💳</span>
+
+                    <span>
+
+                        <span class="option-text">
+                            Debt Repayment
+                        </span>
+
+                        <span class="option-description">
+                            Repayment of existing financial obligations.
+                        </span>
+
+                    </span>
+
+                </span>
+
+            </label>
+
+
+            <!-- PURPOSE PREVIEW -->
+
+            <div
+                id="purposePreview"
+                class="purpose-preview"
+            >
+
+                <strong>Selected Purpose:</strong>
+
+                <span id="selectedPurpose"></span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FINAL CONFIRMATION -->
+
+        <div class="confirmation">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="informationConfirm"
+                >
+
+                <span>
+
+                    <strong>
+                        I confirm the above information is correct.
+                    </strong>
+
+                    I have reviewed the application details and confirm
+                    that the information provided is accurate and
+                    complete to the best of my knowledge.
+
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- CONTINUE -->
+
+        <button
+            id="continueButton"
+            type="button"
+        >
+            Continue to Final Review →
+        </button>
+
+
+        <!-- BACK -->
+
+        <button
+            id="backButton"
+            type="button"
+            class="back-button"
+        >
+            ← Back to Step 1
+        </button>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+        🔒 Application Review & Confirmation
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /*
+     * LOAD INFORMATION FROM STEP 1
+     */
+
+    document.getElementById("fullname").textContent =
+        localStorage.getItem("fullname") || "Not provided";
+
+    document.getElementById("phone").textContent =
+        localStorage.getItem("phone") || "Not provided";
+
+    document.getElementById("national_id").textContent =
+        localStorage.getItem("national_id") || "Not provided";
+
+    document.getElementById("age").textContent =
+        localStorage.getItem("age") || "Not provided";
+
+    document.getElementById("occupation").textContent =
+        localStorage.getItem("occupation") || "Not provided";
+
+    document.getElementById("county").textContent =
+        localStorage.getItem("county") || "Not provided";
+
+    document.getElementById("source").textContent =
+        localStorage.getItem("source") || "Not provided";
+
+
+    /*
+     * RESTORE PREVIOUSLY SELECTED PURPOSE
+     */
+
+    const savedPurpose =
+        localStorage.getItem("purpose");
+
+    if (savedPurpose) {
+
+        const savedOption =
+            document.querySelector(
+                'input[name="purpose"][value="' +
+                savedPurpose +
+                '"]'
+            );
+
+        if (savedOption) {
+
+            savedOption.checked = true;
+
+            showPurpose(savedPurpose);
+
+        }
+
+    }
+
+
+    /*
+     * PURPOSE SELECTION
+     */
+
+    const purposeOptions =
+        document.querySelectorAll(
+            'input[name="purpose"]'
+        );
+
+
+    purposeOptions.forEach(function (option) {
+
+        option.addEventListener(
+            "change",
+            function () {
+
+                showPurpose(this.value);
+
+            }
+        );
+
+    });
+
+
+    /*
+     * DISPLAY SELECTED PURPOSE
+     */
+
+    function showPurpose(value) {
+
+        document.getElementById(
+            "selectedPurpose"
+        ).textContent = " " + value;
+
+        document.getElementById(
+            "purposePreview"
+        ).style.display = "block";
+
+    }
+
+
+    /*
+     * CONTINUE TO STEP 3
+     */
+
+    document.getElementById("continueButton")
+        .addEventListener("click", function () {
+
+
+            const selected =
+                document.querySelector(
+                    'input[name="purpose"]:checked'
+                );
+
+
+            const confirmation =
+                document.getElementById(
+                    "informationConfirm"
+                );
+
+
+            /*
+             * CHECK PURPOSE
+             */
+
+            if (!selected) {
+
+                alert(
+                    "Please select the purpose of the funds."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * CHECK CONFIRMATION
+             */
+
+            if (!confirmation.checked) {
+
+                alert(
+                    "Please confirm that the above information is correct."
+                );
+
+                return;
+
+            }
+
+
+            /*
+             * SAVE PURPOSE
+             */
+
+            localStorage.setItem(
+                "purpose",
+                selected.value
+            );
+
+
+            /*
+             * SAVE CONFIRMATION
+             */
+
+            localStorage.setItem(
+                "informationConfirmed",
+                "true"
+            );
+
+
+            /*
+             * GO TO STEP 3
+             */
+
+            window.location.href = "page3.html";
+
+        });
+
+
+    /*
+     * BACK TO STEP 1
+     */
+
+    document.getElementById("backButton")
+        .addEventListener("click", function () {
+
+            window.location.href = "step1.html";
+
+        });
+
+});
+
+</script>
+
+</body>
+  </html>
