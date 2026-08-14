@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NYOTA Application</title>
+<title>NYOTA Funds - Application Portal</title>
 
 <style>
 
@@ -18,483 +19,504 @@
 
 body{
     min-height:100vh;
+    padding:20px;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:15px;
 
     background:
-        radial-gradient(circle at 0% 0%,#08a83c,transparent 30%),
-        radial-gradient(circle at 100% 100%,#1769e8,transparent 30%),
-        linear-gradient(135deg,#064e3b,#1d4ed8);
+        radial-gradient(circle at 10% 10%,rgba(34,197,94,.35),transparent 28%),
+        radial-gradient(circle at 90% 90%,rgba(59,130,246,.35),transparent 28%),
+        linear-gradient(135deg,#064e3b,#1e40af);
 }
 
+/* MAIN CARD */
 
-/* MAIN PORTAL */
-
-.portal{
+.container{
     width:100%;
     max-width:680px;
-
     background:#fff;
-
-    border-radius:28px;
-
+    border-radius:30px;
     overflow:hidden;
 
     box-shadow:
-        0 25px 60px rgba(0,0,0,.28);
+        0 30px 70px rgba(0,0,0,.28),
+        0 5px 20px rgba(0,0,0,.08);
+
+    animation:appear .7s ease;
 }
 
+@keyframes appear{
 
-/* =================================
-   NYOTA PHOTO AT THE TOP
-================================= */
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.98);
+    }
 
-.hero-photo{
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+}
+
+/* PHOTO */
+
+.hero{
+    position:relative;
     width:100%;
     background:#fff;
-    overflow:hidden;
 }
 
-.hero-photo img{
-    display:block;
-
+.hero img{
     width:100%;
+    display:block;
     height:auto;
-
-    max-height:330px;
-
-    object-fit:cover;
 }
 
+/* PHOTO OVERLAY */
 
-/* =================================
-   HEADER
-================================= */
+.hero::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:70px;
+
+    background:linear-gradient(
+        transparent,
+        rgba(0,0,0,.15)
+    );
+}
+
+/* HEADER */
 
 .header{
     position:relative;
-
-    padding:28px 15px 30px;
-
+    padding:27px 20px;
     text-align:center;
-
     color:white;
 
     background:
         linear-gradient(
             135deg,
-            #087d32,
-            #079f3e,
-            #1769e8
+            #087f32,
+            #0e9f46,
+            #2563eb
         );
 
     overflow:hidden;
 }
 
+.header::before{
+    content:"";
+    position:absolute;
+
+    width:160px;
+    height:160px;
+
+    border-radius:50%;
+
+    right:-70px;
+    top:-80px;
+
+    background:rgba(255,255,255,.10);
+}
+
+.header::after{
+    content:"";
+    position:absolute;
+
+    width:110px;
+    height:110px;
+
+    border-radius:50%;
+
+    left:-50px;
+    bottom:-65px;
+
+    background:rgba(255,255,255,.08);
+}
+
 .header h1{
     position:relative;
-    z-index:2;
+    z-index:1;
 
-    font-size:34px;
-
+    font-size:30px;
     font-weight:900;
+    letter-spacing:.7px;
 }
 
 .subtitle{
     position:relative;
-    z-index:2;
+    z-index:1;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
-    gap:15px;
-
+    gap:14px;
     margin-top:8px;
 
-    font-size:18px;
-
+    font-size:15px;
     font-weight:600;
+
+    opacity:.95;
 }
 
 .line{
     width:65px;
     height:2px;
-
-    background:white;
+    border-radius:5px;
+    background:rgba(255,255,255,.8);
 }
 
-
-/* =================================
-   CONTENT
-================================= */
+/* CONTENT */
 
 .content{
-    padding:28px 30px;
+    padding:32px;
 }
 
-
-/* =================================
-   WELCOME
-================================= */
+/* WELCOME */
 
 .welcome{
     text-align:center;
-
-    margin-bottom:22px;
+    margin-bottom:26px;
 }
 
 .welcome h2{
-    color:#078532;
-
-    font-size:34px;
-
+    color:#087f32;
+    font-size:31px;
+    font-weight:800;
     margin-bottom:8px;
 }
 
 .welcome h2::before{
     content:"✦";
-
-    color:#f5c400;
-
-    margin-right:10px;
+    color:#f5bd00;
+    margin-right:9px;
 }
 
 .welcome h2::after{
     content:"✦";
-
-    color:#f5c400;
-
-    margin-left:10px;
+    color:#f5bd00;
+    margin-left:9px;
 }
 
 .welcome p{
-    color:#53627a;
-
+    color:#64748b;
     font-size:15px;
-
-    line-height:1.5;
+    line-height:1.7;
+    max-width:500px;
+    margin:auto;
 }
 
-
-/* =================================
-   NOTICE
-================================= */
+/* NOTICE */
 
 .notice{
     display:flex;
-
     align-items:center;
+    gap:16px;
 
-    gap:15px;
+    padding:18px;
 
-    padding:15px;
+    margin-bottom:24px;
 
-    margin-bottom:20px;
+    border-radius:17px;
 
-    border-radius:15px;
+    background:linear-gradient(
+        135deg,
+        #f0fdf4,
+        #ecfdf5
+    );
 
-    background:#effcf4;
+    border:1px solid #bbf7d0;
+    border-left:5px solid #16a34a;
 
-    border:1px solid #b8edca;
-
-    border-left:6px solid #15be45;
+    box-shadow:0 6px 18px rgba(22,163,74,.07);
 }
 
 .notice-icon{
-    font-size:30px;
+    width:52px;
+    height:52px;
+    min-width:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:15px;
+
+    background:#dcfce7;
+
+    font-size:25px;
 }
 
 .notice h3{
-    color:#08732e;
-
+    color:#087f32;
     font-size:17px;
-
-    margin-bottom:3px;
+    margin-bottom:4px;
 }
 
 .notice p{
     color:#526174;
-
     font-size:13px;
-
-    line-height:1.4;
+    line-height:1.5;
 }
 
-
-/* =================================
-   APPLICATION STEPS
-================================= */
+/* STEPS */
 
 .steps{
     display:flex;
-
     flex-direction:column;
-
-    gap:10px;
-
-    margin-bottom:20px;
+    gap:12px;
+    margin-bottom:26px;
 }
 
 .step{
-    min-height:78px;
-
     display:flex;
-
     align-items:center;
+    gap:13px;
 
-    padding:9px;
+    padding:14px;
 
-    border-radius:15px;
+    border-radius:17px;
 
-    background:#f9fbff;
+    background:#fff;
 
-    border:1px solid #dce5ef;
+    border:1px solid #e2e8f0;
 
     box-shadow:
-        0 4px 12px rgba(30,64,175,.06);
+        0 5px 15px rgba(15,23,42,.05);
 
-    transition:.2s ease;
+    transition:.25s ease;
 }
 
 .step:hover{
     transform:translateY(-2px);
 
     box-shadow:
-        0 7px 18px rgba(30,64,175,.10);
-}
+        0 10px 25px rgba(15,23,42,.09);
 
+    border-color:#a7f3d0;
+}
 
 /* NUMBER */
 
 .number{
-    width:48px;
-    height:48px;
-
-    min-width:48px;
+    width:45px;
+    height:45px;
+    min-width:45px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
-    border-radius:50%;
+    border-radius:14px;
 
     color:white;
 
-    font-size:23px;
+    font-size:18px;
+    font-weight:800;
 
-    font-weight:900;
+    box-shadow:0 5px 12px rgba(0,0,0,.12);
 }
 
 .green{
-    background:#16bd43;
+    background:linear-gradient(135deg,#16a34a,#15803d);
 }
 
 .blue{
-    background:#1769e8;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
 }
 
 .yellow{
-    background:#f6b900;
+    background:linear-gradient(135deg,#f59e0b,#d97706);
 }
-
 
 /* ICON */
 
 .step-icon{
-    width:48px;
-
-    min-width:48px;
+    width:45px;
+    min-width:45px;
 
     text-align:center;
 
     font-size:27px;
 }
 
-
-/* DIVIDER */
-
-.divider{
-    width:2px;
-
-    height:43px;
-
-    margin-right:10px;
-
-    background:#cbd5e1;
-}
-
-
-/* STEP TEXT */
+/* TEXT */
 
 .step-text{
     flex:1;
 
-    color:#0d1935;
+    color:#1e293b;
 
-    font-size:12px;
+    font-size:14px;
+    font-weight:650;
 
-    line-height:1.35;
-
-    font-weight:700;
+    line-height:1.45;
 }
-
 
 /* ARROW */
 
 .arrow{
-    width:38px;
-    height:38px;
-
-    min-width:38px;
+    width:34px;
+    height:34px;
+    min-width:34px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
     border-radius:50%;
 
-    font-size:30px;
+    font-size:25px;
+    font-weight:400;
 }
 
 .arrow-green{
-    color:#0b9e35;
-
-    background:#e5f4f7;
+    color:#15803d;
+    background:#ecfdf5;
 }
 
 .arrow-blue{
-    color:#1261d6;
-
-    background:#e3efff;
+    color:#2563eb;
+    background:#eff6ff;
 }
 
 .arrow-yellow{
-    color:#ed9e00;
-
-    background:#fff3d9;
+    color:#d97706;
+    background:#fffbeb;
 }
 
-
-/* =================================
-   START BUTTON
-================================= */
+/* BUTTON */
 
 .start{
+    position:relative;
+
     width:100%;
 
-    padding:16px;
+    padding:18px;
 
     border:none;
-
-    border-radius:15px;
+    border-radius:16px;
 
     color:white;
 
     background:
         linear-gradient(
             135deg,
-            #15c343,
-            #079632
+            #16a34a,
+            #087f32
         );
 
     font-size:18px;
-
     font-weight:800;
 
     cursor:pointer;
 
     box-shadow:
-        0 9px 20px rgba(5,150,60,.22);
+        0 12px 25px rgba(22,163,74,.25);
 
-    transition:.2s ease;
+    transition:.25s ease;
+
+    overflow:hidden;
+}
+
+.start::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:100%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.18),
+        transparent
+    );
+
+    transition:.5s;
+}
+
+.start:hover::before{
+    left:100%;
 }
 
 .start:hover{
     transform:translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(5,150,60,.28);
+        0 16px 30px rgba(22,163,74,.32);
 }
 
 .start:active{
     transform:translateY(0);
 }
 
-
-/* =================================
-   FOOTER
-================================= */
+/* FOOTER */
 
 .footer{
-    padding:13px;
+    padding:17px;
 
     text-align:center;
 
-    background:#f1f5f9;
+    background:#f8fafc;
 
     border-top:1px solid #e2e8f0;
 
-    color:#53627a;
+    color:#64748b;
 
     font-size:12px;
-
-    font-weight:600;
 }
 
+.footer strong{
+    color:#087f32;
+}
 
-/* =================================
-   MOBILE
-================================= */
+/* MOBILE */
 
 @media(max-width:600px){
 
     body{
-        padding:5px;
-
+        padding:8px;
         align-items:flex-start;
+        padding-top:12px;
     }
 
-    .portal{
-        border-radius:20px;
-    }
-
-    .hero-photo img{
-        max-height:260px;
+    .container{
+        border-radius:23px;
     }
 
     .header{
-        padding:23px 10px;
+        padding:23px 15px;
     }
 
     .header h1{
-        font-size:27px;
+        font-size:24px;
     }
 
     .subtitle{
-        font-size:15px;
-
-        gap:8px;
+        font-size:13px;
     }
 
     .line{
-        width:45px;
+        width:42px;
     }
 
     .content{
-        padding:22px 15px;
+        padding:22px 17px;
     }
 
     .welcome h2{
-        font-size:29px;
+        font-size:27px;
     }
 
     .welcome p{
@@ -502,92 +524,48 @@ body{
     }
 
     .notice{
-        padding:12px;
+        padding:14px;
     }
 
     .notice-icon{
-        font-size:25px;
-    }
-
-    .notice h3{
-        font-size:15px;
-    }
-
-    .notice p{
-        font-size:11px;
+        width:45px;
+        height:45px;
+        min-width:45px;
+        font-size:21px;
     }
 
     .step{
-        min-height:70px;
+        padding:12px 10px;
+        gap:9px;
     }
 
     .number{
-        width:43px;
-        height:43px;
-
-        min-width:43px;
-
-        font-size:20px;
+        width:40px;
+        height:40px;
+        min-width:40px;
+        font-size:16px;
     }
 
     .step-icon{
-        width:40px;
-
-        min-width:40px;
-
-        font-size:24px;
+        width:35px;
+        min-width:35px;
+        font-size:23px;
     }
 
     .step-text{
-        font-size:11px;
+        font-size:12px;
     }
 
     .arrow{
-        width:33px;
-        height:33px;
-
-        min-width:33px;
-
-        font-size:26px;
+        width:30px;
+        height:30px;
+        min-width:30px;
+        font-size:21px;
     }
 
     .start{
+        padding:17px;
         font-size:17px;
-
-        padding:15px;
-    }
-
-}
-
-
-/* =================================
-   EXTRA SMALL PHONES
-================================= */
-
-@media(max-width:380px){
-
-    .content{
-        padding:18px 12px;
-    }
-
-    .header h1{
-        font-size:24px;
-    }
-
-    .welcome h2{
-        font-size:26px;
-    }
-
-    .step-text{
-        font-size:10px;
-    }
-
-    .step-icon{
-        display:none;
-    }
-
-    .divider{
-        display:none;
     }
 
 }
@@ -596,18 +574,13 @@ body{
 
 </head>
 
-
 <body>
 
+<div class="container">
 
-<div class="portal">
+    <!-- NYOTA IMAGE -->
 
-
-    <!-- =================================
-         NYOTA PHOTO ONLY AT THE TOP
-    ================================== -->
-
-    <div class="hero-photo">
+    <div class="hero">
 
         <img
             src="nyota.png"
@@ -617,9 +590,7 @@ body{
     </div>
 
 
-    <!-- =================================
-         HEADER
-    ================================== -->
+    <!-- HEADER -->
 
     <div class="header">
 
@@ -642,12 +613,9 @@ body{
     </div>
 
 
-    <!-- =================================
-         CONTENT
-    ================================== -->
+    <!-- CONTENT -->
 
     <div class="content">
-
 
         <!-- WELCOME -->
 
@@ -658,9 +626,8 @@ body{
             </h2>
 
             <p>
-                Complete the application by providing
-                your information and reviewing your
-                application details.
+                Complete the application by providing your
+                information and reviewing your application details.
             </p>
 
         </div>
@@ -681,9 +648,8 @@ body{
                 </h3>
 
                 <p>
-                    Please make sure your personal
-                    information is correct before
-                    beginning the application.
+                    Please make sure your personal information
+                    is correct before beginning the application.
                 </p>
 
             </div>
@@ -691,12 +657,9 @@ body{
         </div>
 
 
-        <!-- APPLICATION STEPS -->
+        <!-- STEPS -->
 
         <div class="steps">
-
-
-            <!-- STEP 1 -->
 
             <div class="step">
 
@@ -708,13 +671,8 @@ body{
                     👤
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="step-text">
-
-                    Enter your personal
-                    information
-
+                    Enter your personal information
                 </div>
 
                 <div class="arrow arrow-green">
@@ -723,8 +681,6 @@ body{
 
             </div>
 
-
-            <!-- STEP 2 -->
 
             <div class="step">
 
@@ -736,14 +692,9 @@ body{
                     📝
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="step-text">
-
-                    Review your application
-                    and select the purpose
-                    of the funds
-
+                    Review your application and select
+                    the purpose of the funds
                 </div>
 
                 <div class="arrow arrow-blue">
@@ -752,8 +703,6 @@ body{
 
             </div>
 
-
-            <!-- STEP 3 -->
 
             <div class="step">
 
@@ -765,13 +714,8 @@ body{
                     💰
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="step-text">
-
-                    Select the amount
-                    requested
-
+                    Select the amount requested
                 </div>
 
                 <div class="arrow arrow-yellow">
@@ -790,13 +734,8 @@ body{
             type="button"
             onclick="startApplication()"
         >
-
-            🚀 &nbsp;
-            Start Application
-            &nbsp; →
-
+            🚀 &nbsp; Start Application &nbsp; →
         </button>
-
 
     </div>
 
@@ -805,10 +744,11 @@ body{
 
     <div class="footer">
 
-        🔒 Secure Application Portal
+        🔒 &nbsp;
+        <strong>Secure</strong>
+        Application Portal
 
     </div>
-
 
 </div>
 
@@ -822,7 +762,6 @@ function startApplication(){
 }
 
 </script>
-
 
 </body>
 </html>
