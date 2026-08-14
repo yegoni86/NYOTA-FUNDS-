@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Select Fund Amount</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0B7A2F,#2563EB);
+    padding:20px;
+}
+
+.container{
+    max-width:650px;
+    margin:auto;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+
+.header{
+    background:linear-gradient(135deg,#0B7A2F,#2563EB);
+    color:#fff;
+    text-align:center;
+    padding:30px;
+}
+
+.content{
+    padding:25px;
+}
+
+.message{
+    background:#F0FDF4;
+    border-left:5px solid #16A34A;
+    padding:18px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+.option{
+    display:flex;
+    align-items:center;
+    padding:15px;
+    margin-bottom:12px;
+    border:2px solid #e5e7eb;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+.option:hover{
+    border-color:#16A34A;
+    background:#F8FFFA;
+}
+
+.option input{
+    margin-right:15px;
+    transform:scale(1.2);
+}
+
+.summary{
+    margin-top:25px;
+    padding:20px;
+    background:#F9FAFB;
+    border-radius:12px;
+}
+
+.summary p{
+    margin-bottom:10px;
+}
+
+.summary p:last-child{
+    margin-bottom:0;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    margin-top:20px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#16A34A,#0B7A2F);
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🇰🇪 Select Fund Amount</h1>
+    </div>
+
+    <div class="content">
+
+        <div class="message">
+            <h3>Congratulations 🎉</h3>
+            <p>Please select the amount you wish to apply for.</p>
+        </div>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="22000"
+                data-fee="350"
+            >
+            Ksh 22,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="30000"
+                data-fee="450"
+            >
+            Ksh 30,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="40000"
+                data-fee="550"
+            >
+            Ksh 40,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="50000"
+                data-fee="650"
+            >
+            Ksh 50,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="65000"
+                data-fee="800"
+            >
+            Ksh 65,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="75000"
+                data-fee="900"
+            >
+            Ksh 75,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="85000"
+                data-fee="1000"
+            >
+            Ksh 85,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="110000"
+                data-fee="1200"
+            >
+            Ksh 110,000
+        </label>
+
+
+        <label class="option">
+            <input
+                type="radio"
+                name="amount"
+                value="150000"
+                data-fee="1500"
+            >
+            Ksh 150,000
+        </label>
+
+
+        <div class="summary">
+
+            <p>
+                <strong>Amount Selected:</strong>
+                <span id="selected">Ksh ---</span>
+            </p>
+
+            <p>
+                <strong>Demo Processing Fee:</strong>
+                <span id="fee">Ksh ---</span>
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="continueButton"
+        >
+            Continue →
+        </button>
+
+    </div>
+
+
+    <div class="footer">
+        Demo application interface
+    </div>
+
+</div>
+
+
+<script>
+
+const radios =
+    document.querySelectorAll(
+        'input[name="amount"]'
+    );
+
+let amount = "";
+let fee = "";
+
+
+radios.forEach(function(radio){
+
+    radio.addEventListener("change",function(){
+
+        amount = this.value;
+        fee = this.dataset.fee;
+
+        document.getElementById("selected")
+            .textContent =
+            "Ksh " +
+            Number(amount).toLocaleString();
+
+        document.getElementById("fee")
+            .textContent =
+            "Ksh " +
+            Number(fee).toLocaleString();
+
+    });
+
+});
+
+
+document.getElementById("continueButton")
+    .addEventListener("click",function(){
+
+        if(amount === ""){
+
+            alert(
+                "Please select an amount."
+            );
+
+            return;
+        }
+
+
+        localStorage.setItem(
+            "loanAmount",
+            amount
+        );
+
+
+        localStorage.setItem(
+            "processingFee",
+            fee
+        );
+
+
+        /*
+         * Change this to the filename
+         * of your next page.
+         */
+
+        window.location.href =
+            "payment.html";
+
+    });
+
+</script>
+
+</body>
+</html>
