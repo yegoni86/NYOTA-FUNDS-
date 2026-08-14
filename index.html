@@ -1,1 +1,320 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NYOTA Application Portal</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    background:linear-gradient(135deg,#0B7A2F,#2563EB);
+}
+
+.container{
+    width:100%;
+    max-width:650px;
+    background:#fff;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 18px 40px rgba(0,0,0,.25);
+}
+
+/* IMAGE */
+
+.hero-image{
+    width:100%;
+    display:block;
+    max-height:390px;
+    object-fit:cover;
+}
+
+/* HEADER */
+
+.header{
+    padding:25px 20px;
+    text-align:center;
+    color:white;
+    background:linear-gradient(135deg,#0B7A2F,#2563EB);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:16px;
+}
+
+/* CONTENT */
+
+.content{
+    padding:28px;
+}
+
+.welcome{
+    text-align:center;
+    margin-bottom:22px;
+}
+
+.welcome h2{
+    color:#0B7A2F;
+    margin-bottom:10px;
+    font-size:25px;
+}
+
+.welcome p{
+    color:#555;
+    line-height:1.6;
+}
+
+/* NOTICE */
+
+.info{
+    background:#F0FDF4;
+    border-left:5px solid #16A34A;
+    padding:17px;
+    border-radius:12px;
+    margin-bottom:25px;
+    line-height:1.6;
+    color:#166534;
+}
+
+/* STEPS */
+
+.steps{
+    margin-bottom:25px;
+}
+
+.step{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 0;
+    color:#374151;
+}
+
+.number{
+    min-width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#0B7A2F;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* BUTTON */
+
+button{
+    width:100%;
+    padding:17px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#16A34A,#0B7A2F);
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    padding:18px;
+    border-top:1px solid #eee;
+    color:#666;
+    font-size:14px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    body{
+        padding:8px;
+    }
+
+    .hero-image{
+        max-height:300px;
+    }
+
+    .header{
+        padding:22px 15px;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .content{
+        padding:22px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+    <!-- NYOTA IMAGE -->
+
+    <img
+        src=nyota.png
+        alt="NYOTA Funds"
+        class="hero-image"
+    >
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>NYOTA APPLICATION</h1>
+
+        <p>Application Portal</p>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h2>Welcome</h2>
+
+            <p>
+                Complete the application by providing
+                your information and reviewing your
+                application details.
+            </p>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="info">
+
+            <strong>📋 Before You Start</strong><br>
+
+            Please make sure your personal information
+            is correct before beginning the application.
+
+        </div>
+
+
+        <!-- APPLICATION STEPS -->
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="number">
+                    1
+                </div>
+
+                <span>
+                    Enter your personal information
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="number">
+                    2
+                </div>
+
+                <span>
+                    Review your application and select
+                    the purpose of the funds
+                </span>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="number">
+                    3
+                </div>
+
+                <span>
+                    Select the amount requested
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- START APPLICATION -->
+
+        <button
+            type="button"
+            onclick="startApplication()"
+        >
+            Start Application →
+        </button>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        🔒 Application Portal
+
+    </div>
+
+</div>
+
+
+<script>
+
+function startApplication(){
+
+    window.location.href = "page1.html";
+
+}
+
+</script>
+
+</body>
+</html> 
