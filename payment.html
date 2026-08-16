@@ -1,822 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+payButton.addEventListener("click", async function () {
 
-<meta charset="UTF-8">
+    hideError();
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    const phone =
+        phoneElement.value.trim();
 
-<title>NYOTA FUNDS | Payment</title>
+    if (!/^0[17][0-9]{8}$/.test(phone)) {
 
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
->
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',Arial,sans-serif;
-}
-
-body{
-    min-height:100vh;
-    padding:20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0B7A2F,
-            #2563EB
-        );
-}
-
-.container{
-    width:100%;
-    max-width:650px;
-
-    margin:30px auto;
-
-    background:#fff;
-
-    border-radius:25px;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 20px 45px
-        rgba(0,0,0,.25);
-}
-
-.header{
-    padding:45px 35px;
-
-    text-align:center;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0B7A2F,
-            #2563EB
-        );
-}
-
-.logo{
-    width:95px;
-    height:95px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    margin:0 auto 18px;
-
-    border-radius:50%;
-
-    background:#fff;
-
-    color:#16A34A;
-
-    font-size:45px;
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.2);
-}
-
-.header h1{
-    font-size:38px;
-    font-weight:700;
-    letter-spacing:1px;
-}
-
-.header p{
-    margin-top:8px;
-    font-size:18px;
-    opacity:.95;
-}
-
-.content{
-    padding:30px;
-}
-
-.success{
-    padding:18px;
-
-    margin-bottom:20px;
-
-    color:#166534;
-
-    background:#ECFDF5;
-
-    border-left:
-        5px solid #16A34A;
-
-    border-radius:14px;
-
-    font-size:18px;
-}
-
-.error{
-    display:none;
-
-    padding:15px;
-
-    margin-bottom:20px;
-
-    color:#991B1B;
-
-    background:#FEF2F2;
-
-    border-left:
-        5px solid #DC2626;
-
-    border-radius:12px;
-
-    line-height:1.5;
-}
-
-.card{
-    padding:24px;
-
-    margin-bottom:20px;
-
-    background:#F9FAFB;
-
-    border-radius:16px;
-}
-
-.row{
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:15px;
-
-    padding:18px 0;
-
-    border-bottom:
-        1px solid #ddd;
-}
-
-.row:last-child{
-    border-bottom:none;
-}
-
-.label{
-    color:#555;
-
-    font-size:18px;
-
-    font-weight:600;
-}
-
-.label i{
-    margin-right:8px;
-
-    color:#2563EB;
-
-    font-size:20px;
-}
-
-.value{
-    color:#16A34A;
-
-    font-size:24px;
-
-    font-weight:bold;
-
-    white-space:nowrap;
-}
-
-.phone-section{
-    margin-top:20px;
-}
-
-.phone-label{
-    display:block;
-
-    margin-bottom:10px;
-}
-
-.phone-input{
-    width:100%;
-
-    padding:16px;
-
-    border:
-        2px solid #ddd;
-
-    border-radius:12px;
-
-    outline:none;
-
-    font-size:18px;
-
-    transition:.2s;
-}
-
-.phone-input:focus{
-    border-color:#2563EB;
-}
-
-.notice{
-    padding:18px;
-
-    margin-bottom:20px;
-
-    color:#1E3A8A;
-
-    background:#EFF6FF;
-
-    border-left:
-        5px solid #2563EB;
-
-    border-radius:14px;
-
-    font-size:16px;
-
-    line-height:1.5;
-}
-
-.notice i{
-    margin-right:8px;
-}
-
-button{
-    width:100%;
-
-    padding:18px;
-
-    border:none;
-
-    border-radius:14px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #16A34A,
-            #0B7A2F
+        showError(
+            "Please enter a valid Kenyan phone number, for example 0712345678."
         );
 
-    font-size:20px;
+        phoneElement.focus();
 
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.3s;
-}
-
-button:hover:not(:disabled){
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 12px 24px
-        rgba(0,0,0,.22);
-}
-
-button:disabled{
-    opacity:.7;
-
-    cursor:not-allowed;
-}
-
-.footer{
-    padding:20px;
-
-    color:#666;
-
-    border-top:
-        1px solid #eee;
-
-    text-align:center;
-
-    font-size:15px;
-}
-
-.footer i{
-    margin-right:6px;
-
-    color:#16A34A;
-}
-
-@media(max-width:600px){
-
-    body{
-        padding:10px;
+        return;
     }
 
-    .container{
-        margin:10px auto;
+    if (!amount || amount <= 0) {
 
-        border-radius:20px;
+        showError(
+            "The selected amount is invalid."
+        );
+
+        return;
     }
 
-    .header{
-        padding:35px 20px;
-    }
+    payButton.disabled = true;
 
-    .logo{
-        width:80px;
-        height:80px;
+    payButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Sending M-Pesa prompt...';
 
-        font-size:36px;
-    }
+    try {
 
-    .header h1{
-        font-size:30px;
-    }
+        const reference =
+            "NYOTA-" +
+            Date.now();
 
-    .header p{
-        font-size:16px;
-    }
+        const response =
+            await fetch(
+                "/api/payment",
+                {
+                    method: "POST",
 
-    .content{
-        padding:22px;
-    }
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-    .row{
-        align-items:flex-start;
+                        "Accept":
+                            "application/json"
+                    },
 
-        flex-direction:column;
-    }
+                    body: JSON.stringify({
 
-    .value{
-        font-size:22px;
-    }
+                        phone: phone,
 
-    button{
-        padding:16px;
+                        amount: amount,
 
-        font-size:18px;
-    }
-}
+                        reference: reference,
 
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-    <div class="header">
-
-        <div class="logo">
-            <i class="fa-solid fa-star"></i>
-        </div>
-
-        <h1>
-            NYOTA FUNDS
-        </h1>
-
-        <p>
-            Secure Payment Portal
-        </p>
-
-    </div>
-
-
-    <div class="content">
-
-        <div class="success">
-
-            <i class="fa-solid fa-circle-check"></i>
-
-            Your application has been received successfully.
-
-        </div>
-
-
-        <div
-            id="errorBox"
-            class="error"
-        ></div>
-
-
-        <div class="card">
-
-            <div class="row">
-
-                <span class="label">
-
-                    <i class="fa-solid fa-sack-dollar"></i>
-
-                    Selected Amount
-
-                </span>
-
-                <span
-                    class="value"
-                    id="loanAmount"
-                >
-                    Ksh --
-                </span>
-
-            </div>
-
-
-            <div class="row">
-
-                <span class="label">
-
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-
-                    Processing Fee
-
-                </span>
-
-                <span
-                    class="value"
-                    id="processingFee"
-                >
-                    Ksh --
-                </span>
-
-            </div>
-
-
-            <div class="phone-section">
-
-                <label
-                    for="phone"
-                    class="label phone-label"
-                >
-
-                    <i class="fa-solid fa-phone"></i>
-
-                    Phone Number
-
-                </label>
-
-
-                <input
-                    type="tel"
-                    id="phone"
-                    class="phone-input"
-                    placeholder="07XXXXXXXX or 01XXXXXXXX"
-                    autocomplete="tel"
-                    maxlength="10"
-                >
-
-            </div>
-
-        </div>
-
-
-        <div class="notice">
-
-            <i class="fa-solid fa-circle-info"></i>
-
-            Please confirm your selected amount and
-            processing fee before proceeding with payment.
-
-        </div>
-
-
-        <button
-            id="payButton"
-            type="button"
-        >
-
-            <i class="fa-solid fa-credit-card"></i>
-
-            Proceed to Payment
-
-        </button>
-
-    </div>
-
-
-    <div class="footer">
-
-        <i class="fa-solid fa-shield-halved"></i>
-
-        Payments are processed securely by Stripe
-
-    </div>
-
-</div>
-
-
-<script>
-
-/*
-|--------------------------------------------------------------------------
-| Get elements
-|--------------------------------------------------------------------------
-*/
-
-const loanAmountElement =
-    document.getElementById("loanAmount");
-
-const processingFeeElement =
-    document.getElementById("processingFee");
-
-const phoneElement =
-    document.getElementById("phone");
-
-const payButton =
-    document.getElementById("payButton");
-
-const errorBox =
-    document.getElementById("errorBox");
-
-
-/*
-|--------------------------------------------------------------------------
-| Get saved application values
-|--------------------------------------------------------------------------
-*/
-
-const amount =
-    Number(
-        localStorage.getItem("loanAmount")
-    );
-
-const fee =
-    Number(
-        localStorage.getItem("processingFee")
-    );
-
-
-/*
-|--------------------------------------------------------------------------
-| Format Kenyan currency
-|--------------------------------------------------------------------------
-*/
-
-function formatKES(value){
-
-    return "Ksh " +
-        Number(value).toLocaleString("en-KE");
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Display amounts
-|--------------------------------------------------------------------------
-*/
-
-if(amount > 0){
-
-    loanAmountElement.textContent =
-        formatKES(amount);
-
-}
-
-if(fee >= 0){
-
-    processingFeeElement.textContent =
-        formatKES(fee);
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Error display
-|--------------------------------------------------------------------------
-*/
-
-function showError(message){
-
-    errorBox.textContent =
-        message;
-
-    errorBox.style.display =
-        "block";
-
-}
-
-function hideError(){
-
-    errorBox.textContent =
-        "";
-
-    errorBox.style.display =
-        "none";
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Proceed to payment
-|--------------------------------------------------------------------------
-*/
-
-payButton.addEventListener(
-    "click",
-    async function(){
-
-        hideError();
-
-        const phone =
-            phoneElement.value.trim();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validate Kenyan phone
-        |--------------------------------------------------------------------------
-        */
-
-        if(!/^0[17][0-9]{8}$/.test(phone)){
-
-            showError(
-                "Please enter a valid Kenyan phone number, for example 0712345678."
+                        description:
+                            "NYOTA Funds application payment"
+                    })
+                }
             );
 
-            phoneElement.focus();
+        const data =
+            await response.json();
 
-            return;
-        }
+        console.log(
+            "Payment response:",
+            data
+        );
 
+        if (
+            !response.ok ||
+            !data.success
+        ) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validate loan amount
-        |--------------------------------------------------------------------------
-        */
-
-        if(!amount || amount <= 0){
-
-            showError(
-                "The selected loan amount is invalid."
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Unable to start payment."
             );
-
-            return;
         }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validate processing fee
-        |--------------------------------------------------------------------------
-        */
-
-        if(isNaN(fee) || fee <= 0){
-
-            showError(
-                "The processing fee is invalid."
-            );
-
-            return;
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Disable button
-        |--------------------------------------------------------------------------
-        */
-
-        payButton.disabled =
-            true;
 
         payButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i> Connecting to payment...';
+            '<i class="fa-solid fa-check"></i> STK Push Sent';
 
+        alert(
+            "M-Pesa payment prompt sent to " +
+            phone +
+            ". Please check your phone and enter your M-Pesa PIN."
+        );
 
-        try{
+    } catch (error) {
 
-            /*
-            |--------------------------------------------------------------------------
-            | Send request to your PHP backend
-            |--------------------------------------------------------------------------
-            */
+        console.error(
+            "Payment error:",
+            error
+        );
 
-            const response =
-                await fetch(
-                    "payment.php",
-                    {
-                        method:"POST",
+        showError(
+            error.message ||
+            "Unable to start payment."
+        );
 
-                        headers:{
-                            "Content-Type":
-                                "application/json",
+        payButton.disabled = false;
 
-                            "Accept":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                amount:amount,
-
-                                fee:fee,
-
-                                phone:phone
-                            })
-                    }
-                );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Read response as text first.
-            |
-            | This makes PHP errors easier to identify.
-            |--------------------------------------------------------------------------
-            */
-
-            const raw =
-                await response.text();
-
-
-            console.log(
-                "Server response:",
-                raw
-            );
-
-
-            let data;
-
-            try{
-
-                data =
-                    JSON.parse(raw);
-
-            }catch(e){
-
-                throw new Error(
-                    "The payment server did not return valid JSON."
-                );
-
-            }
-
-
-            if(
-                !response.ok ||
-                !data.success
-            ){
-
-                throw new Error(
-                    data.error ||
-                    "Unable to start payment."
-                );
-
-            }
-
-
-            if(!data.url){
-
-                throw new Error(
-                    "No Stripe Checkout URL was returned."
-                );
-
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | Redirect to Stripe Checkout
-            |--------------------------------------------------------------------------
-            */
-
-            window.location.href =
-                data.url;
-
-
-        }catch(error){
-
-            console.error(error);
-
-            showError(
-                error.message
-            );
-
-            payButton.disabled =
-                false;
-
-            payButton.innerHTML =
-                '<i class="fa-solid fa-credit-card"></i> Proceed to Payment';
-
-        }
-
+        payButton.innerHTML =
+            '<i class="fa-solid fa-credit-card"></i> Proceed to Payment';
     }
-);
 
-</script>
-
-</body>
-
-</html>
+});
