@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Paylor Test Connection</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #064e3b, #2563eb);
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+
+h1 {
+    color: #087f32;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.demo {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    background: #fff7ed;
+    border-left: 5px solid #f59e0b;
+    color: #92400e;
+    line-height: 1.5;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #334155;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #16a34a;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #334155;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>PAYLOR TEST</h1>
+
+    <p class="subtitle">
+        Backend Connection Test
+    </p>
+
+    <div class="demo">
+        <strong>TEST MODE</strong><br>
+        This page only tests communication with your backend.
+        It does not initiate an M-Pesa payment or charge money.
+    </div>
+
+    <label for="phone">
+        Test Phone Number
+    </label>
+
+    <input
+        type="tel"
+        id="phone"
+        placeholder="254712345678"
+        value="254712345678"
+    >
+
+    <label for="amount">
+        Test Amount (KES)
+    </label>
+
+    <input
+        type="number"
+        id="amount"
+        min="1"
+        value="10"
+    >
+
+    <button
+        id="testButton"
+        type="button"
+    >
+        Test Backend Connection
+    </button>
+
+    <div id="result">
+        Waiting for test...
+    </div>
+
+    <div class="footer">
+        Paylor integration test
+    </div>
+
+</div>
+
+<script>
+
+const button =
+    document.getElementById("testButton");
+
+const result =
+    document.getElementById("result");
+
+button.addEventListener("click", async () => {
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const amount =
+        Number(
+            document.getElementById("amount").value
+        );
+
+    if (!/^254[17][0-9]{8}$/.test(phone)) {
+
+        result.textContent =
+            "Please enter a valid Kenyan number in 254XXXXXXXXX format.";
+
+        return;
+    }
+
+    if (!amount || amount <= 0) {
+
+        result.textContent =
+            "Please enter a valid test amount.";
+
+        return;
+    }
+
+    button.disabled = true;
+
+    button.textContent =
+        "Testing...";
+
+    result.textContent =
+        "Connecting to backend...";
+
+    try {
+
+        const response =
+            await fetch("/api/payment-test", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    phone: phone,
+                    amount: amount,
+                    reference:
+                        "TEST-" + Date.now()
+
+                })
+
+            });
+
+        const text =
+            await response.text();
+
+        let data;
+
+        try {
+
+            data = JSON.parse(text);
+
+        } catch {
+
+            data = {
+                rawResponse: text
+            };
+
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Backend returned an error."
+            );
+
+        }
+
+        result.textContent =
+            "Backend response:\n\n" +
+            JSON.stringify(
+                data,
+                null,
+                2
+            );
+
+    } catch (error) {
+
+        result.textContent =
+            "Connection test failed:\n\n" +
+            error.message;
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Test Backend Connection";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
