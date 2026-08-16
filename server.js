@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 
 const app = express();
-
 const PORT = process.env.PORT || 10000;
 
 /*
@@ -13,20 +12,17 @@ const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static(__dirname));
 
 
 /*
 |--------------------------------------------------------------------------
-| Home page
+| Website
 |--------------------------------------------------------------------------
 */
 
 app.get("/", (req, res) => {
-    res.sendFile(
-        path.join(__dirname, "index.html")
-    );
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 
@@ -37,51 +33,73 @@ app.get("/", (req, res) => {
 */
 
 app.get("/api/health", (req, res) => {
-
     res.status(200).json({
         success: true,
-        message: "NYOTA Funds backend is running"
+        message: "NYOTA Funds backend is running",
+        environment: "test"
     });
-
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| DEMO / TEST PAYMENT ENDPOINT
+| Paylor configuration check
 |--------------------------------------------------------------------------
 |
-| This endpoint only tests communication between
-| payment.html and the Render backend.
-|
-| It does NOT initiate a real payment.
-|
+| This checks whether the Render environment variables exist.
+| It NEVER returns the secret values.
 |--------------------------------------------------------------------------
 */
 
-app.post("/api/payment", (req, res) => {
+app.get("/api/paylor-config", (req, res) => {
+
+    const apiKey = process.env.PAYLOR_API_KEY;
+    const channelId = process.env.PAYLOR_CHANNEL_ID;
+    const webhookSecret = process.env.PAYLOR_WEBHOOK_SECRET;
+
+    res.json({
+        success: true,
+
+        paylor: {
+            apiKeyConfigured: Boolean(apiKey),
+            channelConfigured: Boolean(channelId),
+            webhookSecretConfigured: Boolean(webhookSecret),
+
+            channelId:
+                channelId
+                    ? channelId
+                    : null
+        }
+    });
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| SAFE TEST ENDPOINT
+|--------------------------------------------------------------------------
+|
+| This does NOT send an M-Pesa STK Push.
+|
+| It only verifies that paylor-test.html can communicate
+| with this Render backend.
+|--------------------------------------------------------------------------
+*/
+
+app.post("/api/payment-test", (req, res) => {
 
     try {
 
         const {
             phone,
             amount,
-            reference,
-            description
+            reference
         } = req.body;
-
-
-        console.log("Demo payment request:", {
-            phone,
-            amount,
-            reference,
-            description
-        });
 
 
         /*
         |--------------------------------------------------------------------------
-        | Validate request
+        | Validate phone
         |--------------------------------------------------------------------------
         */
 
@@ -95,11 +113,12 @@ app.post("/api/payment", (req, res) => {
         }
 
 
-        if (!amount || Number(amount) <= 0) {
+        if (!/^254[17][0-9]{8}$/.test(phone)) {
 
             return res.status(400).json({
                 success: false,
-                message: "A valid amount is required"
+                message:
+                    "Use Kenyan format 254XXXXXXXXX"
             });
 
         }
@@ -107,7 +126,71 @@ app.post("/api/payment", (req, res) => {
 
         /*
         |--------------------------------------------------------------------------
-        | Demo response
+        | Validate amount
+        |--------------------------------------------------------------------------
+        */
+
+        const numericAmount =
+            Number(amount);
+
+        if (
+            !Number.isFinite(numericAmount) ||
+            numericAmount <= 0
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message:
+                    "A valid amount is required"
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check environment configuration
+        |--------------------------------------------------------------------------
+        */
+
+        const configuration = {
+
+            apiKeyConfigured:
+                Boolean(process.env.PAYLOR_API_KEY),
+
+            channelConfigured:
+                Boolean(process.env.PAYLOR_CHANNEL_ID),
+
+            webhookSecretConfigured:
+                Boolean(process.env.PAYLOR_WEBHOOK_SECRET)
+
+        };
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Log test request
+        |--------------------------------------------------------------------------
+        |
+        | Do not log API keys or webhook secrets.
+        |--------------------------------------------------------------------------
+        */
+
+        console.log(
+            "Paylor test request:",
+            {
+                phone,
+                amount: numericAmount,
+                reference:
+                    reference ||
+                    "TEST-" + Date.now()
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Return safe test response
         |--------------------------------------------------------------------------
         */
 
@@ -115,42 +198,42 @@ app.post("/api/payment", (req, res) => {
 
             success: true,
 
+            test: true,
+
             message:
-                "Backend connection successful. Demo payment request received.",
+                "Backend connection successful. No M-Pesa payment was initiated.",
 
-            demo: true,
+            request: {
 
-            reference:
-                reference ||
-                "DEMO-" + Date.now(),
+                phone,
 
-            phone: phone,
+                amount:
+                    numericAmount,
 
-            amount: Number(amount),
+                reference:
+                    reference ||
+                    "TEST-" + Date.now()
 
-            description:
-                description ||
-                "NYOTA demo/test request"
+            },
+
+            paylorConfiguration:
+                configuration
 
         });
 
     } catch (error) {
 
         console.error(
-            "Payment endpoint error:",
+            "Payment test error:",
             error
         );
-
 
         return res.status(500).json({
 
             success: false,
 
             message:
-                "Internal server error",
-
-            error:
-                error.message
+                "Internal server error"
 
         });
 
@@ -161,7 +244,31 @@ app.post("/api/payment", (req, res) => {
 
 /*
 |--------------------------------------------------------------------------
-| 404 JSON response for API routes
+| Test callback endpoint
+|--------------------------------------------------------------------------
+|
+| This only records a test callback.
+|--------------------------------------------------------------------------
+*/
+
+app.post("/api/paylor-callback-test", (req, res) => {
+
+    console.log(
+        "Paylor test callback received:",
+        req.body
+    );
+
+    return res.status(200).json({
+        success: true,
+        message: "Test callback received"
+    });
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| API 404
 |--------------------------------------------------------------------------
 */
 
@@ -188,20 +295,16 @@ app.use("/api", (req, res) => {
 app.use((error, req, res, next) => {
 
     console.error(
-        "Server error:",
+        "Unhandled server error:",
         error
     );
-
 
     res.status(500).json({
 
         success: false,
 
         message:
-            "Server error",
-
-        error:
-            error.message
+            "Server error"
 
     });
 
@@ -214,10 +317,14 @@ app.use((error, req, res, next) => {
 |--------------------------------------------------------------------------
 */
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    console.log(
-        `Server running on port ${PORT}`
-    );
+        console.log(
+            `Server running on port ${PORT}`
+        );
 
-});
+    }
+);
