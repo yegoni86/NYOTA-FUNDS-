@@ -1,34 +1,34 @@
 const express = require("express");
 const path = require("path");
-const axios = require("axios");
-const crypto = require("crypto");
 
 const app = express();
 
 const PORT = process.env.PORT || 10000;
 
-const PAYLOR_API_URL =
-  "https://api.paylorke.com/api/v1/merchants/payments/stk-push";
-
-const BACKEND_URL =
-  process.env.BACKEND_URL ||
-  "https://nyota-funds-backend-xhcb.onrender.com";
-
-const PAYLOR_CHANNEL_ID =
-  process.env.PAYLOR_CHANNEL_ID || "PAYL-DPLPJD";
+/*
+|--------------------------------------------------------------------------
+| Middleware
+|--------------------------------------------------------------------------
+*/
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(__dirname));
+
 
 /*
 |--------------------------------------------------------------------------
-| Home
+| Home page
 |--------------------------------------------------------------------------
 */
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(
+        path.join(__dirname, "index.html")
+    );
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,191 +37,176 @@ app.get("/", (req, res) => {
 */
 
 app.get("/api/health", (req, res) => {
-  res.json({
-    success: true,
-    message: "Nyota Funds backend is running"
-  });
+
+    res.status(200).json({
+        success: true,
+        message: "NYOTA Funds backend is running"
+    });
+
 });
+
 
 /*
 |--------------------------------------------------------------------------
-| Start Paylor M-Pesa STK Push
+| DEMO / TEST PAYMENT ENDPOINT
+|--------------------------------------------------------------------------
+|
+| This endpoint only tests communication between
+| payment.html and the Render backend.
+|
+| It does NOT initiate a real payment.
+|
 |--------------------------------------------------------------------------
 */
 
-app.post("/api/payment", async (req, res) => {
-  try {
-    const {
-      phone,
-      amount,
-      reference,
-      description
-    } = req.body;
+app.post("/api/payment", (req, res) => {
 
-    if (!phone || !amount) {
-      return res.status(400).json({
+    try {
+
+        const {
+            phone,
+            amount,
+            reference,
+            description
+        } = req.body;
+
+
+        console.log("Demo payment request:", {
+            phone,
+            amount,
+            reference,
+            description
+        });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validate request
+        |--------------------------------------------------------------------------
+        */
+
+        if (!phone) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Phone number is required"
+            });
+
+        }
+
+
+        if (!amount || Number(amount) <= 0) {
+
+            return res.status(400).json({
+                success: false,
+                message: "A valid amount is required"
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Demo response
+        |--------------------------------------------------------------------------
+        */
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Backend connection successful. Demo payment request received.",
+
+            demo: true,
+
+            reference:
+                reference ||
+                "DEMO-" + Date.now(),
+
+            phone: phone,
+
+            amount: Number(amount),
+
+            description:
+                description ||
+                "NYOTA demo/test request"
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Payment endpoint error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Internal server error",
+
+            error:
+                error.message
+
+        });
+
+    }
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| 404 JSON response for API routes
+|--------------------------------------------------------------------------
+*/
+
+app.use("/api", (req, res) => {
+
+    res.status(404).json({
+
         success: false,
-        message: "Phone and amount are required"
-      });
-    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Convert Kenyan phone number to 254 format
-    |--------------------------------------------------------------------------
-    */
-
-    let formattedPhone = String(phone).replace(/\s+/g, "");
-
-    if (formattedPhone.startsWith("0")) {
-      formattedPhone =
-        "254" + formattedPhone.substring(1);
-    }
-
-    if (formattedPhone.startsWith("+254")) {
-      formattedPhone =
-        formattedPhone.substring(1);
-    }
-
-    if (!/^254[17][0-9]{8}$/.test(formattedPhone)) {
-      return res.status(400).json({
-        success: false,
         message:
-          "Invalid Kenyan phone number. Use 0712345678 or 254712345678."
-      });
-    }
+            "API endpoint not found"
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validate amount
-    |--------------------------------------------------------------------------
-    */
-
-    const paymentAmount = Number(amount);
-
-    if (
-      !Number.isFinite(paymentAmount) ||
-      paymentAmount <= 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid payment amount"
-      });
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Generate reference if frontend didn't provide one
-    |--------------------------------------------------------------------------
-    */
-
-    const paymentReference =
-      reference ||
-      `NYOTA-${Date.now()}-${crypto
-        .randomBytes(3)
-        .toString("hex")
-        .toUpperCase()}`;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Paylor request
-    |--------------------------------------------------------------------------
-    */
-
-    const payload = {
-      phone: formattedPhone,
-      amount: paymentAmount,
-      reference: paymentReference,
-      channelId: PAYLOR_CHANNEL_ID,
-      description:
-        description || "NYOTA Funds application payment",
-      callbackUrl:
-        `${BACKEND_URL}/api/paylor-callback`
-    };
-
-    console.log("Sending Paylor STK request:", {
-      phone: formattedPhone,
-      amount: paymentAmount,
-      reference: paymentReference,
-      channelId: PAYLOR_CHANNEL_ID
     });
 
-    const response = await axios.post(
-      PAYLOR_API_URL,
-      payload,
-      {
-        headers: {
-          Authorization:
-            `Bearer ${process.env.PAYLOR_API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        timeout: 30000
-      }
-    );
+});
 
-    console.log(
-      "Paylor response:",
-      response.data
-    );
 
-    return res.json({
-      success: true,
-      message:
-        "STK Push sent. Please check your M-Pesa phone.",
-      reference: paymentReference,
-      data: response.data
-    });
+/*
+|--------------------------------------------------------------------------
+| Global error handler
+|--------------------------------------------------------------------------
+*/
 
-  } catch (error) {
+app.use((error, req, res, next) => {
 
     console.error(
-      "Paylor error:",
-      error.response?.data ||
-      error.message
+        "Server error:",
+        error
     );
 
-    return res.status(
-      error.response?.status || 500
-    ).json({
-      success: false,
-      message:
-        error.response?.data?.message ||
-        "Payment request failed",
-      error:
-        error.response?.data ||
-        error.message
+
+    res.status(500).json({
+
+        success: false,
+
+        message:
+            "Server error",
+
+        error:
+            error.message
+
     });
-  }
+
 });
 
-/*
-|--------------------------------------------------------------------------
-| Paylor webhook callback
-|--------------------------------------------------------------------------
-*/
-
-app.post(
-  "/api/paylor-callback",
-  (req, res) => {
-
-    console.log(
-      "Paylor callback received:",
-      JSON.stringify(req.body, null, 2)
-    );
-
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT:
-    | Payment status should be verified from Paylor before
-    | treating an application as paid.
-    |--------------------------------------------------------------------------
-    */
-
-    return res.json({
-      success: true
-    });
-  }
-);
 
 /*
 |--------------------------------------------------------------------------
@@ -229,8 +214,10 @@ app.post(
 |--------------------------------------------------------------------------
 */
 
-app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  );
+app.listen(PORT, "0.0.0.0", () => {
+
+    console.log(
+        `Server running on port ${PORT}`
+    );
+
 });
