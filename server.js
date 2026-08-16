@@ -1,29 +1,25 @@
 const express = require("express");
-const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
 /*
 |--------------------------------------------------------------------------
-| Middleware
+| IMPORTANT
+|--------------------------------------------------------------------------
+| Keep the raw request body.
+| Paylor signs the exact bytes it sends.
 |--------------------------------------------------------------------------
 */
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname));
-
-
-/*
-|--------------------------------------------------------------------------
-| Website
-|--------------------------------------------------------------------------
-*/
-
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
+app.use(
+    express.json({
+        verify: (req, res, buffer) => {
+            req.rawBody = buffer;
+        }
+    })
+);
 
 
 /*
@@ -33,280 +29,215 @@ app.get("/", (req, res) => {
 */
 
 app.get("/api/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: "NYOTA Funds backend is running",
-        environment: "test"
-    });
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Paylor configuration check
-|--------------------------------------------------------------------------
-|
-| This checks whether the Render environment variables exist.
-| It NEVER returns the secret values.
-|--------------------------------------------------------------------------
-*/
-
-app.get("/api/paylor-config", (req, res) => {
-
-    const apiKey = process.env.PAYLOR_API_KEY;
-    const channelId = process.env.PAYLOR_CHANNEL_ID;
-    const webhookSecret = process.env.PAYLOR_WEBHOOK_SECRET;
-
     res.json({
         success: true,
-
-        paylor: {
-            apiKeyConfigured: Boolean(apiKey),
-            channelConfigured: Boolean(channelId),
-            webhookSecretConfigured: Boolean(webhookSecret),
-
-            channelId:
-                channelId
-                    ? channelId
-                    : null
-        }
+        message: "Backend is running"
     });
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| SAFE TEST ENDPOINT
-|--------------------------------------------------------------------------
-|
-| This does NOT send an M-Pesa STK Push.
-|
-| It only verifies that paylor-test.html can communicate
-| with this Render backend.
+| Paylor signed webhook
 |--------------------------------------------------------------------------
 */
 
-app.post("/api/payment-test", (req, res) => {
+app.post("/api/paylor-callback", (req, res) => {
 
     try {
 
+        const signature =
+            req.headers["x-webhook-signature"];
+
+        const secret =
+            process.env.PAYLOR_WEBHOOK_SECRET;
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check configuration
+        |--------------------------------------------------------------------------
+        */
+
+        if (!secret) {
+
+            console.error(
+                "PAYLOR_WEBHOOK_SECRET is not configured"
+            );
+
+            return res.status(500).json({
+                success: false,
+                message: "Webhook secret is not configured"
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Check signature exists
+        |--------------------------------------------------------------------------
+        */
+
+        if (!signature) {
+
+            console.warn(
+                "Paylor webhook missing X-Webhook-Signature"
+            );
+
+            return res.status(401).json({
+                success: false,
+                message: "Missing webhook signature"
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Calculate expected HMAC
+        |--------------------------------------------------------------------------
+        */
+
+        const expectedSignature =
+            crypto
+                .createHmac("sha256", secret)
+                .update(req.rawBody)
+                .digest("hex");
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Timing-safe comparison
+        |--------------------------------------------------------------------------
+        */
+
+        const received =
+            Buffer.from(signature, "utf8");
+
+        const expected =
+            Buffer.from(expectedSignature, "utf8");
+
+
+        if (
+            received.length !==
+            expected.length
+        ) {
+
+            return res.status(401).json({
+                success: false,
+                message: "Invalid webhook signature"
+            });
+
+        }
+
+
+        if (
+            !crypto.timingSafeEqual(
+                received,
+                expected
+            )
+        ) {
+
+            return res.status(401).json({
+                success: false,
+                message: "Invalid webhook signature"
+            });
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Signature is valid
+        |--------------------------------------------------------------------------
+        */
+
         const {
-            phone,
-            amount,
-            reference
+            event,
+            transaction
         } = req.body;
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Validate phone
-        |--------------------------------------------------------------------------
-        */
-
-        if (!phone) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Phone number is required"
-            });
-
-        }
-
-
-        if (!/^254[17][0-9]{8}$/.test(phone)) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Use Kenyan format 254XXXXXXXXX"
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validate amount
-        |--------------------------------------------------------------------------
-        */
-
-        const numericAmount =
-            Number(amount);
-
-        if (
-            !Number.isFinite(numericAmount) ||
-            numericAmount <= 0
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    "A valid amount is required"
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Check environment configuration
-        |--------------------------------------------------------------------------
-        */
-
-        const configuration = {
-
-            apiKeyConfigured:
-                Boolean(process.env.PAYLOR_API_KEY),
-
-            channelConfigured:
-                Boolean(process.env.PAYLOR_CHANNEL_ID),
-
-            webhookSecretConfigured:
-                Boolean(process.env.PAYLOR_WEBHOOK_SECRET)
-
-        };
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Log test request
-        |--------------------------------------------------------------------------
-        |
-        | Do not log API keys or webhook secrets.
-        |--------------------------------------------------------------------------
-        */
-
         console.log(
-            "Paylor test request:",
+            "Verified Paylor webhook:",
             {
-                phone,
-                amount: numericAmount,
-                reference:
-                    reference ||
-                    "TEST-" + Date.now()
+                event,
+                transaction
             }
         );
 
 
         /*
         |--------------------------------------------------------------------------
-        | Return safe test response
+        | Handle successful payment
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            event === "payment.success"
+        ) {
+
+            console.log(
+                "Payment completed:",
+                transaction?.reference
+            );
+
+            /*
+             * Update your legitimate order/payment
+             * record here.
+             *
+             * IMPORTANT:
+             * Reconcile using transaction.reference.
+             */
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Handle failed payment
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            event === "payment.failed"
+        ) {
+
+            console.log(
+                "Payment failed:",
+                transaction?.reference
+            );
+
+            /*
+             * Mark the legitimate payment/order
+             * as failed here.
+             */
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Respond quickly
         |--------------------------------------------------------------------------
         */
 
         return res.status(200).json({
-
-            success: true,
-
-            test: true,
-
-            message:
-                "Backend connection successful. No M-Pesa payment was initiated.",
-
-            request: {
-
-                phone,
-
-                amount:
-                    numericAmount,
-
-                reference:
-                    reference ||
-                    "TEST-" + Date.now()
-
-            },
-
-            paylorConfiguration:
-                configuration
-
+            received: true
         });
 
     } catch (error) {
 
         console.error(
-            "Payment test error:",
+            "Webhook processing error:",
             error
         );
 
         return res.status(500).json({
-
             success: false,
-
-            message:
-                "Internal server error"
-
+            message: "Webhook processing failed"
         });
 
     }
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Test callback endpoint
-|--------------------------------------------------------------------------
-|
-| This only records a test callback.
-|--------------------------------------------------------------------------
-*/
-
-app.post("/api/paylor-callback-test", (req, res) => {
-
-    console.log(
-        "Paylor test callback received:",
-        req.body
-    );
-
-    return res.status(200).json({
-        success: true,
-        message: "Test callback received"
-    });
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| API 404
-|--------------------------------------------------------------------------
-*/
-
-app.use("/api", (req, res) => {
-
-    res.status(404).json({
-
-        success: false,
-
-        message:
-            "API endpoint not found"
-
-    });
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Global error handler
-|--------------------------------------------------------------------------
-*/
-
-app.use((error, req, res, next) => {
-
-    console.error(
-        "Unhandled server error:",
-        error
-    );
-
-    res.status(500).json({
-
-        success: false,
-
-        message:
-            "Server error"
-
-    });
 
 });
 
