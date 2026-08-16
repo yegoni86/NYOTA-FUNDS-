@@ -30,8 +30,10 @@ app.post("/api/payment", async (req, res) => {
         phone,
         amount,
         reference,
+        channelId: process.env.PAYLOR_CHANNEL_ID,
         description: "NYOTA application payment",
-        callbackUrl: "https://nyota-funds-backend-xhcb.onrender.com/api/paylor-callback"
+        callbackUrl:
+          "https://nyota-funds-backend-xhcb.onrender.com/api/paylor-callback"
       },
       {
         headers: {
@@ -47,7 +49,10 @@ app.post("/api/payment", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Paylor error:", error.response?.data || error.message);
+    console.error(
+      "Paylor error:",
+      error.response?.data || error.message
+    );
 
     res.status(500).json({
       success: false,
