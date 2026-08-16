@@ -1,492 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYOTA FUNDS | Payment</title>
 
-<title>NYOTA FUNDS | Demo Payment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    padding: 20px;
-    background: linear-gradient(135deg, #0B7A2F, #2563EB);
-}
-
-.container {
-    width: 100%;
-    max-width: 650px;
-    margin: 30px auto;
-    background: #fff;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 20px 45px rgba(0,0,0,.25);
-}
-
-.header {
-    padding: 40px 25px;
-    text-align: center;
-    color: #fff;
-    background: linear-gradient(135deg, #0B7A2F, #2563EB);
-}
-
-.header h1 {
-    font-size: 32px;
-}
-
-.header p {
-    margin-top: 8px;
-    font-size: 17px;
-}
-
-.content {
-    padding: 30px;
-}
-
-.demo {
-    padding: 15px;
-    margin-bottom: 20px;
-    color: #92400E;
-    background: #FFFBEB;
-    border-left: 5px solid #F59E0B;
-    border-radius: 12px;
-    line-height: 1.5;
-}
-
-.success {
-    padding: 18px;
-    margin-bottom: 20px;
-    color: #166534;
-    background: #ECFDF5;
-    border-left: 5px solid #16A34A;
-    border-radius: 14px;
-}
-
-.error {
-    display: none;
-    padding: 15px;
-    margin-bottom: 20px;
-    color: #991B1B;
-    background: #FEF2F2;
-    border-left: 5px solid #DC2626;
-    border-radius: 12px;
-    line-height: 1.5;
-}
-
-.card {
-    padding: 24px;
-    margin-bottom: 20px;
-    background: #F9FAFB;
-    border-radius: 16px;
-}
-
-.row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 18px 0;
-    border-bottom: 1px solid #ddd;
-}
-
-.row:last-child {
-    border-bottom: none;
-}
-
-.label {
-    color: #555;
-    font-size: 17px;
-    font-weight: 600;
-}
-
-.value {
-    color: #16A34A;
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.phone-section {
-    margin-top: 20px;
-}
-
-.phone-label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.phone-input {
-    width: 100%;
-    padding: 16px;
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    outline: none;
-    font-size: 18px;
-}
-
-.phone-input:focus {
-    border-color: #2563EB;
-}
-
-button {
-    width: 100%;
-    padding: 18px;
-    border: none;
-    border-radius: 14px;
-    color: white;
-    background: linear-gradient(135deg, #16A34A, #0B7A2F);
-    font-size: 19px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:disabled {
-    opacity: .7;
-    cursor: not-allowed;
-}
-
-.footer {
-    padding: 18px;
-    color: #666;
-    border-top: 1px solid #eee;
-    text-align: center;
-    font-size: 14px;
-}
-
-@media(max-width:600px) {
     body {
-        padding: 10px;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #0b7a2f, #2563eb);
     }
 
     .container {
-        margin: 10px auto;
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .header {
+      padding: 35px 20px;
+      text-align: center;
+      color: white;
+      background: linear-gradient(135deg, #0b7a2f, #2563eb);
+    }
+
+    .header h1 {
+      font-size: 32px;
+    }
+
+    .header p {
+      margin-top: 8px;
     }
 
     .content {
-        padding: 20px;
+      padding: 25px;
+    }
+
+    .notice {
+      padding: 15px;
+      margin-bottom: 20px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-left: 4px solid #2563eb;
+      border-radius: 10px;
+    }
+
+    .amount-card {
+      padding: 20px;
+      background: #f9fafb;
+      border-radius: 15px;
     }
 
     .row {
-        flex-direction: column;
-        align-items: flex-start;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 16px 0;
+      border-bottom: 1px solid #ddd;
     }
-}
-</style>
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .value {
+      font-weight: bold;
+      color: #16a34a;
+      white-space: nowrap;
+    }
+
+    .payable {
+      margin-top: 20px;
+      padding: 20px;
+      text-align: center;
+      background: #ecfdf5;
+      border-radius: 14px;
+    }
+
+    .payable span {
+      display: block;
+    }
+
+    .payable .title {
+      color: #166534;
+      font-size: 16px;
+    }
+
+    .payable .amount {
+      margin-top: 8px;
+      color: #15803d;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .footer {
+      padding: 18px;
+      text-align: center;
+      color: #666;
+      border-top: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+      }
+
+      .value {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
     <div class="header">
-        <h1>NYOTA FUNDS</h1>
-        <p>Demo Payment Portal</p>
+      <h1>NYOTA FUNDS</h1>
+      <p>Payment Information</p>
     </div>
 
     <div class="content">
 
-        <div class="demo">
-            <strong>DEMO / TEST MODE</strong><br>
-            This page does not collect or charge money.
-            It is only used to test the connection between
-            the website and your backend.
+      <div class="notice">
+        Please review the amounts carefully before continuing.
+      </div>
+
+      <div class="amount-card">
+
+        <div class="row">
+          <span class="label">Selected Fund Amount</span>
+          <span class="value" id="fundAmount">Ksh --</span>
         </div>
 
-        <div class="success">
-            ✓ Application data received successfully.
+        <div class="row">
+          <span class="label">Processing Fee</span>
+          <span class="value" id="processingFee">Ksh --</span>
         </div>
 
-        <div id="errorBox" class="error"></div>
+      </div>
 
-        <div class="card">
-
-            <div class="row">
-                <span class="label">Selected Amount</span>
-
-                <span
-                    class="value"
-                    id="loanAmount"
-                >
-                    Ksh --
-                </span>
-            </div>
-
-            <div class="row">
-                <span class="label">Processing Fee</span>
-
-                <span
-                    class="value"
-                    id="processingFee"
-                >
-                    Ksh --
-                </span>
-            </div>
-
-            <div class="phone-section">
-
-                <label
-                    for="phone"
-                    class="label phone-label"
-                >
-                    M-Pesa Phone Number
-                </label>
-
-                <input
-                    type="tel"
-                    id="phone"
-                    class="phone-input"
-                    placeholder="0712345678"
-                    autocomplete="tel"
-                    maxlength="10"
-                >
-
-            </div>
-
-        </div>
-
-        <button
-            id="payButton"
-            type="button"
-        >
-            Test Payment Connection
-        </button>
+      <div class="payable">
+        <span class="title">Amount Payable Now</span>
+        <span class="amount" id="amountPayable">Ksh --</span>
+      </div>
 
     </div>
 
     <div class="footer">
-        Demo/Test Environment
+      Review all charges and terms before making any payment.
     </div>
 
-</div>
+  </div>
 
-<script>
+  <script>
+    const fundAmount =
+      Number(localStorage.getItem("loanAmount"));
 
-const loanAmountElement =
-    document.getElementById("loanAmount");
+    const processingFee =
+      Number(localStorage.getItem("processingFee"));
 
-const processingFeeElement =
-    document.getElementById("processingFee");
-
-const phoneElement =
-    document.getElementById("phone");
-
-const payButton =
-    document.getElementById("payButton");
-
-const errorBox =
-    document.getElementById("errorBox");
-
-
-/* Get values saved by the previous application pages */
-
-const amount =
-    Number(localStorage.getItem("loanAmount"));
-
-const fee =
-    Number(localStorage.getItem("processingFee"));
-
-
-/* Currency formatting */
-
-function formatKES(value) {
-    return "Ksh " +
-        Number(value).toLocaleString("en-KE");
-}
-
-
-/* Display saved values */
-
-if (amount > 0) {
-    loanAmountElement.textContent =
-        formatKES(amount);
-}
-
-if (fee >= 0) {
-    processingFeeElement.textContent =
-        formatKES(fee);
-}
-
-
-/* Error handling */
-
-function showError(message) {
-
-    errorBox.textContent = message;
-
-    errorBox.style.display = "block";
-}
-
-function hideError() {
-
-    errorBox.textContent = "";
-
-    errorBox.style.display = "none";
-}
-
-
-/* Test backend connection */
-
-payButton.addEventListener(
-    "click",
-    async function () {
-
-        hideError();
-
-        const phone =
-            phoneElement.value.trim();
-
-
-        if (!/^0[17][0-9]{8}$/.test(phone)) {
-
-            showError(
-                "Enter a valid Kenyan phone number, for example 0712345678."
-            );
-
-            phoneElement.focus();
-
-            return;
-        }
-
-
-        payButton.disabled = true;
-
-        payButton.textContent =
-            "Connecting to server...";
-
-
-        try {
-
-            const reference =
-                "DEMO-" + Date.now();
-
-
-            const response =
-                await fetch(
-                    "/api/payment",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json",
-
-                            "Accept":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-
-                            phone: phone,
-
-                            amount: amount || 0,
-
-                            reference: reference,
-
-                            description:
-                                "NYOTA demo/test request"
-
-                        })
-                    }
-                );
-
-
-            /*
-             * Read text first.
-             *
-             * This prevents:
-             * "Unexpected end of JSON input"
-             */
-
-            const raw =
-                await response.text();
-
-
-            console.log(
-                "HTTP status:",
-                response.status
-            );
-
-            console.log(
-                "Raw server response:",
-                raw
-            );
-
-
-            let data = {};
-
-
-            if (raw.trim()) {
-
-                try {
-
-                    data =
-                        JSON.parse(raw);
-
-                } catch (parseError) {
-
-                    throw new Error(
-                        "Server returned invalid JSON: " +
-                        raw.substring(0, 300)
-                    );
-                }
-
-            }
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.message ||
-                    data.error ||
-                    "Server returned HTTP " +
-                    response.status
-                );
-            }
-
-
-            /*
-             * Successful test response
-             */
-
-            payButton.textContent =
-                "Connection Successful";
-
-            alert(
-                "Backend connection successful.\n\n" +
-                "Reference: " +
-                reference
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Backend test error:",
-                error
-            );
-
-
-            showError(
-                error.message ||
-                "Unable to connect to the backend."
-            );
-
-
-            payButton.disabled = false;
-
-            payButton.textContent =
-                "Test Payment Connection";
-        }
-
+    function formatKES(amount) {
+      return "Ksh " +
+        Number(amount).toLocaleString("en-KE");
     }
-);
 
-</script>
+    document.getElementById("fundAmount").textContent =
+      fundAmount > 0
+        ? formatKES(fundAmount)
+        : "Ksh --";
+
+    document.getElementById("processingFee").textContent =
+      processingFee >= 0
+        ? formatKES(processingFee)
+        : "Ksh --";
+
+    document.getElementById("amountPayable").textContent =
+      processingFee >= 0
+        ? formatKES(processingFee)
+        : "Ksh --";
+  </script>
 
 </body>
 </html>
