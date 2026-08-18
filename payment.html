@@ -3,1089 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>NYOTA FUNDS | Payment</title>
-
+  <title>Processing Fee</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root{
+      --bg:#07596b;
+      --bg2:#0b6475;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#687486;
+      --green:#14834a;
+      --line:#e1e5e8;
+      --button:#07596b;
     }
-
-    :root {
-      --green: #087f3d;
-      --green-dark: #05652f;
-      --green-light: #eaf8f0;
-      --blue: #2563eb;
-      --blue-light: #eff6ff;
-      --text: #172033;
-      --muted: #667085;
-      --border: #e5e7eb;
-      --white: #ffffff;
-      --danger: #b42318;
-      --danger-bg: #fef3f2;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--text);
     }
-
-    body {
-      min-height: 100vh;
-      font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-      background:
-        radial-gradient(
-          circle at top left,
-          rgba(37, 99, 235, .35),
-          transparent 35%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(8, 127, 61, .35),
-          transparent 35%
-        ),
-        linear-gradient(
-          135deg,
-          #063b24,
-          #075985,
-          #172554
-        );
-
-      color: var(--text);
-      padding: 24px;
+    .page{
+      width:100%;
+      max-width:620px;
+      margin:auto;
+      padding:30px 16px 60px;
     }
-
-    .page {
-      width: 100%;
-      max-width: 680px;
-      margin: 25px auto;
+    .top{
+      text-align:center;
+      color:#fff;
+      margin-bottom:26px;
     }
-
-    /* HEADER */
-
-    .brand {
-      text-align: center;
-      color: white;
-      margin-bottom: 22px;
+    .top h1{
+      margin:0;
+      font-size:34px;
+      font-weight:800;
     }
-
-    .brand-icon {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 14px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 22px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #16a34a,
-          #2563eb
-        );
-
-      box-shadow:
-        0 14px 35px rgba(0, 0, 0, .25);
-
-      font-size: 32px;
+    .top p{
+      margin:10px 0 0;
+      font-size:17px;
+      opacity:.9;
     }
-
-    .brand h1 {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: .5px;
+    .card{
+      background:var(--card);
+      border-radius:30px;
+      padding:34px 28px 38px;
+      box-shadow:0 18px 45px rgba(0,0,0,.22);
     }
-
-    .brand p {
-      margin-top: 7px;
-      font-size: 15px;
-      opacity: .85;
+    .title{
+      text-align:center;
+      font-size:30px;
+      font-weight:800;
+      margin:0 0 22px;
     }
-
-    /* MAIN CARD */
-
-    .card {
-      background: rgba(255,255,255,.98);
-      border-radius: 28px;
-
-      overflow: hidden;
-
-      box-shadow:
-        0 30px 70px rgba(0,0,0,.25);
+    .welcome{
+      text-align:center;
+      font-size:19px;
+      margin-bottom:25px;
     }
-
-    .card-top {
-      padding: 28px 30px 20px;
+    .intro{
+      text-align:center;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:17px;
+      margin:0 auto 28px;
     }
-
-    .test-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-
-      padding: 8px 13px;
-
-      border-radius: 999px;
-
-      background: #fff7ed;
-      color: #c2410c;
-
-      font-size: 12px;
-      font-weight: 800;
-
-      letter-spacing: .5px;
-      text-transform: uppercase;
+    .fee{
+      border:1px solid #b8ded0;
+      background:#eef9f4;
+      border-radius:20px;
+      padding:22px 18px;
+      text-align:center;
+      margin-bottom:28px;
     }
-
-    .title {
-      margin-top: 18px;
-      font-size: 25px;
-      font-weight: 800;
+    .fee-label{
+      color:var(--muted);
+      font-size:16px;
+      margin-bottom:6px;
     }
-
-    .subtitle {
-      margin-top: 8px;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 15px;
+    .fee-value{
+      color:var(--green);
+      font-size:35px;
+      font-weight:800;
     }
-
-    /* AMOUNT SUMMARY */
-
-    .amount-summary {
-      margin-top: 24px;
-
-      border: 1px solid var(--border);
-      border-radius: 20px;
-
-      overflow: hidden;
-
-      background: #fafafa;
+    label{
+      display:block;
+      font-size:16px;
+      font-weight:800;
+      margin:0 0 9px;
     }
-
-    .amount-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      gap: 20px;
-
-      padding: 20px;
-
-      border-bottom: 1px solid var(--border);
+    input{
+      width:100%;
+      padding:16px 17px;
+      border:2px solid var(--line);
+      border-radius:15px;
+      font-size:16px;
+      outline:none;
+      margin-bottom:21px;
     }
-
-    .amount-row:last-child {
-      border-bottom: none;
+    input:focus{border-color:var(--bg)}
+    button{
+      width:100%;
+      padding:17px;
+      border:0;
+      border-radius:15px;
+      background:var(--button);
+      color:#fff;
+      font-size:17px;
+      font-weight:800;
+      cursor:pointer;
     }
-
-    .amount-info {
-      display: flex;
-      align-items: center;
-      gap: 13px;
+    button:hover{background:var(--bg2)}
+    .status{
+      display:none;
+      margin-top:16px;
+      padding:13px;
+      border-radius:12px;
+      background:#eef9f4;
+      color:var(--green);
+      text-align:center;
+      font-weight:700;
     }
-
-    .amount-icon {
-      width: 44px;
-      height: 44px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 13px;
-
-      background: var(--green-light);
-      color: var(--green);
-
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .amount-label {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .amount-description {
-      font-size: 12px;
-      color: #98a2b3;
-    }
-
-    .amount-value {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    /* PAYABLE */
-
-    .payable {
-      margin-top: 18px;
-      padding: 25px;
-
-      border-radius: 20px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ecfdf3,
-          #eff6ff
-        );
-
-      border: 1px solid #d1fae5;
-
-      text-align: center;
-    }
-
-    .payable-label {
-      color: #475467;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .payable-amount {
-      margin-top: 7px;
-
-      font-size: 38px;
-      line-height: 1;
-
-      font-weight: 900;
-
-      color: var(--green);
-    }
-
-    .payable-note {
-      margin-top: 10px;
-
-      color: #667085;
-      font-size: 12px;
-    }
-
-    /* FORM */
-
-    .form-section {
-      margin-top: 25px;
-    }
-
-    .form-label {
-      display: block;
-
-      margin-bottom: 9px;
-
-      font-size: 14px;
-      font-weight: 700;
-      color: #344054;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-
-      left: 15px;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      color: var(--green);
-
-      font-size: 18px;
-    }
-
-    .phone-input {
-      width: 100%;
-
-      padding: 16px 16px 16px 48px;
-
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-
-      outline: none;
-
-      background: white;
-
-      color: var(--text);
-
-      font-size: 16px;
-
-      transition:
-        border-color .2s,
-        box-shadow .2s;
-    }
-
-    .phone-input:focus {
-      border-color: var(--blue);
-
-      box-shadow:
-        0 0 0 4px rgba(37,99,235,.10);
-    }
-
-    .phone-help {
-      margin-top: 8px;
-
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    /* BUTTON */
-
-    .test-button {
-      width: 100%;
-
-      margin-top: 22px;
-
-      padding: 17px;
-
-      border: none;
-      border-radius: 15px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--green),
-          var(--green-dark)
-        );
-
-      color: white;
-
-      font-size: 16px;
-      font-weight: 800;
-
-      cursor: pointer;
-
-      box-shadow:
-        0 10px 22px rgba(8,127,61,.22);
-
-      transition:
-        transform .2s,
-        box-shadow .2s,
-        opacity .2s;
-    }
-
-    .test-button:hover:not(:disabled) {
-      transform: translateY(-2px);
-
-      box-shadow:
-        0 14px 28px rgba(8,127,61,.28);
-    }
-
-    .test-button:disabled {
-      opacity: .65;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    /* RESULT */
-
-    .result {
-      display: none;
-
-      margin-top: 18px;
-
-      padding: 16px;
-
-      border-radius: 14px;
-
-      background: var(--green-light);
-
-      border: 1px solid #bbf7d0;
-
-      color: #166534;
-
-      font-size: 14px;
-
-      line-height: 1.6;
-    }
-
-    .result.error {
-      background: var(--danger-bg);
-      border-color: #fecaca;
-      color: var(--danger);
-    }
-
-    /* SECURITY */
-
-    .security {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      margin-top: 22px;
-
-      padding: 14px;
-
-      border-radius: 13px;
-
-      background: #f8fafc;
-
-      color: #667085;
-
-      font-size: 12px;
-
-      line-height: 1.45;
-    }
-
-    .security-icon {
-      width: 32px;
-      height: 32px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 10px;
-
-      background: #eaf8f0;
-      color: var(--green);
-
-      flex-shrink: 0;
-    }
-
-    /* FOOTER */
-
-    .footer {
-      padding: 20px 25px;
-
-      border-top: 1px solid var(--border);
-
-      text-align: center;
-
-      color: #98a2b3;
-
-      font-size: 12px;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 600px) {
-
-      body {
-        padding: 12px;
-      }
-
-      .page {
-        margin: 10px auto;
-      }
-
-      .brand h1 {
-        font-size: 27px;
-      }
-
-      .brand-icon {
-        width: 62px;
-        height: 62px;
-        font-size: 27px;
-      }
-
-      .card-top {
-        padding: 23px 20px 18px;
-      }
-
-      .title {
-        font-size: 22px;
-      }
-
-      .amount-row {
-        padding: 17px;
-      }
-
-      .amount-value {
-        font-size: 18px;
-      }
-
-      .payable-amount {
-        font-size: 34px;
-      }
+    @media(max-width:480px){
+      .page{padding:24px 12px 45px}
+      .card{padding:30px 21px 34px}
+      .top h1{font-size:30px}
+      .title{font-size:28px}
     }
   </style>
 </head>
-
 <body>
+  <main class="page">
+    <header class="top">
+      <h1>Payment</h1>
+      <p>Secure checkout</p>
+    </header>
 
-  <div class="page">
+    <section class="card">
+      <h2 class="title">Processing Fee</h2>
 
-    <!-- BRAND -->
-
-    <div class="brand">
-
-      <div class="brand-icon">
-        ✦
+      <div class="welcome">
+        Welcome, <strong id="displayName">Customer</strong>
       </div>
 
-      <h1>
-        NYOTA FUNDS
-      </h1>
-
-      <p>
-        Secure payment information
+      <p class="intro">
+        Please review the payment details below and enter your information to continue.
       </p>
 
-    </div>
-
-
-    <!-- MAIN CARD -->
-
-    <div class="card">
-
-      <div class="card-top">
-
-        <span class="test-badge">
-          ● Test Environment
-        </span>
-
-
-        <h2 class="title">
-          Review Payment Details
-        </h2>
-
-        <p class="subtitle">
-          Please review the amounts carefully.
-          Your selected fund amount and the amount
-          payable now are shown separately.
-        </p>
-
-
-        <!-- AMOUNTS -->
-
-        <div class="amount-summary">
-
-          <div class="amount-row">
-
-            <div class="amount-info">
-
-              <div class="amount-icon">
-                K
-              </div>
-
-              <div>
-
-                <div class="amount-label">
-                  Selected Fund Amount
-                </div>
-
-                <div class="amount-description">
-                  Amount requested
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="amount-value"
-              id="fundAmount"
-            >
-              Ksh --
-            </div>
-
-          </div>
-
-
-          <div class="amount-row">
-
-            <div class="amount-info">
-
-              <div class="amount-icon">
-                +
-              </div>
-
-              <div>
-
-                <div class="amount-label">
-                  Processing Fee
-                </div>
-
-                <div class="amount-description">
-                  Fee shown for this application
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="amount-value"
-              id="processingFee"
-            >
-              Ksh --
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- PAYABLE -->
-
-        <div class="processing fee">
-
-          <div class="processing fee-label">
-            Amount Payable Now
-          </div>
-
-          <div
-            class="payable-amount"
-            id="amountPayable"
-          >
-            Ksh --
-          </div>
-
-          <div class="payable-note">
-            This is separate from the selected fund amount.
-          </div>
-
-        </div>
-
-
-        <!-- PHONE -->
-
-        <div class="form-section">
-
-          <label
-            class="form-label"
-            for="phone"
-          >
-            M-Pesa Phone Number
-          </label>
-
-          <div class="input-wrapper">
-
-            <span class="input-icon">
-              ☎
-            </span>
-
-            <input
-              type="tel"
-              id="phone"
-              class="phone-input"
-              placeholder="0712345678"
-              maxlength="10"
-              autocomplete="tel"
-              inputmode="numeric"
-            >
-
-          </div>
-
-          <div class="phone-help">
-            Enter the Kenyan M-Pesa number used for testing.
-          </div>
-
-        </div>
-
-
-        <!-- TEST BUTTON -->
-
-        <button
-          type="button"
-          id="testButton"
-          class="test-button"
-        >
-          Test Payment Connection
-        </button>
-
-
-        <!-- RESULT -->
-
-        <div
-          id="result"
-          class="result"
-        ></div>
-
-
-        <!-- SECURITY -->
-
-        <div class="security">
-
-          <div class="security-icon">
-            ✓
-          </div>
-
-          <div>
-            <strong>Test mode</strong><br>
-            This page only tests communication with
-            your backend. It does not initiate an
-            M-Pesa payment.
-          </div>
-
-        </div>
-
+      <div class="fee">
+        <div class="fee-label">Processing Fee</div>
+        <div class="fee-value">KSh 350</div>
       </div>
 
+      <form id="paymentForm">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="Enter your full name" required>
 
-      <div class="footer">
-        NYOTA FUNDS • Payment Information
-      </div>
+        <label for="phone">M-PESA Phone Number</label>
+        <input id="phone" type="tel" inputmode="numeric"
+               placeholder="2547XXXXXXXX" required>
 
-    </div>
-
-  </div>
-
+        <button type="submit">Pay Processing Fee</button>
+        <div class="status" id="status"></div>
+      </form>
+    </section>
+  </main>
 
   <script>
+    const form = document.getElementById("paymentForm");
+    const nameInput = document.getElementById("name");
+    const displayName = document.getElementById("displayName");
+    const status = document.getElementById("status");
 
-    /*
-    |--------------------------------------------------------------------------
-    | Read saved application values
-    |--------------------------------------------------------------------------
-    */
+    nameInput.addEventListener("input", () => {
+      displayName.textContent = nameInput.value.trim() || "Customer";
+    });
 
-    const fundAmount =
-      Number(
-        localStorage.getItem("loanAmount")
-      );
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    const processingFee =
-      Number(
-        localStorage.getItem("processingFee")
-      );
+      status.style.display = "block";
+      status.textContent = "Starting secure payment...";
 
+      try {
+        const response = await fetch("/api/mpesa/stkpush", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            phone: document.getElementById("phone").value.trim(),
+            amount: 350
+          })
+        });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Elements
-    |--------------------------------------------------------------------------
-    */
+        const data = await response.json();
 
-    const fundAmountElement =
-      document.getElementById("fundAmount");
-
-    const processingFeeElement =
-      document.getElementById("processingFee");
-
-    const amountPayableElement =
-      document.getElementById("amountPayable");
-
-    const phoneElement =
-      document.getElementById("phone");
-
-    const testButton =
-      document.getElementById("testButton");
-
-    const result =
-      document.getElementById("result");
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Currency formatting
-    |--------------------------------------------------------------------------
-    */
-
-    function formatKES(amount) {
-
-      return "Ksh " +
-        Number(amount).toLocaleString("en-KE");
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Display fund amount
-    |--------------------------------------------------------------------------
-    */
-
-    if (fundAmount > 0) {
-
-      fundAmountElement.textContent =
-        formatKES(fundAmount);
-
-    } else {
-
-      fundAmountElement.textContent =
-        "Ksh --";
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Display processing fee
-    |--------------------------------------------------------------------------
-    */
-
-    if (processingFee >= 0) {
-
-      processingFeeElement.textContent =
-        formatKES(processingFee);
-
-      amountPayableElement.textContent =
-        formatKES(processingFee);
-
-    } else {
-
-      processingFeeElement.textContent =
-        "Ksh --";
-
-      amountPayableElement.textContent =
-        "Ksh --";
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Show result
-    |--------------------------------------------------------------------------
-    */
-
-    function showResult(
-      message,
-      isError = false
-    ) {
-
-      result.innerHTML =
-        message;
-
-      result.classList.toggle(
-        "error",
-        isError
-      );
-
-      result.style.display =
-        "block";
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Test backend connection
-    |--------------------------------------------------------------------------
-    */
-
-    testButton.addEventListener(
-      "click",
-      async function () {
-
-        result.style.display =
-          "none";
-
-        const phone =
-          phoneElement.value.trim();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validate phone
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-          !/^0[17][0-9]{8}$/.test(phone)
-        ) {
-
-          showResult(
-            "Please enter a valid Kenyan phone number, for example 0712345678.",
-            true
-          );
-
-          phoneElement.focus();
-
-          return;
-
+        if (!response.ok) {
+          throw new Error(data.error || "Unable to start payment.");
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validate fee
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-          !Number.isFinite(processingFee) ||
-          processingFee <= 0
-        ) {
-
-          showResult(
-            "The processing fee is not configured correctly.",
-            true
-          );
-
-          return;
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Disable button
-        |--------------------------------------------------------------------------
-        */
-
-        testButton.disabled =
-          true;
-
-        testButton.textContent =
-          "Testing connection…";
-
-
-        try {
-
-          /*
-          |--------------------------------------------------------------------------
-          | Send TEST request only
-          |--------------------------------------------------------------------------
-          */
-
-          const response =
-            await fetch(
-              "/api/payment",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json",
-
-                  "Accept":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify({
-
-                    phone: phone,
-
-                    /*
-                     * IMPORTANT:
-                     * The test uses the payable amount,
-                     * NOT the requested fund amount.
-                     */
-
-                    amount:
-                      processingFee,
-
-                    reference:
-                      "TEST-" +
-                      Date.now(),
-
-                    description:
-                      "Payment connection test"
-
-                  })
-              }
-            );
-
-
-          /*
-          |--------------------------------------------------------------------------
-          | Read response as text first
-          |--------------------------------------------------------------------------
-          */
-
-          const raw =
-            await response.text();
-
-
-          let data;
-
-          try {
-
-            data =
-              JSON.parse(raw);
-
-          } catch (parseError) {
-
-            console.error(
-              "Raw backend response:",
-              raw
-            );
-
-            throw new Error(
-              "The backend did not return valid JSON. Check your Render logs."
-            );
-
-          }
-
-
-          /*
-          |--------------------------------------------------------------------------
-          | Backend error
-          |--------------------------------------------------------------------------
-          */
-
-          if (!response.ok) {
-
-            throw new Error(
-              data.message ||
-              data.error ||
-              "Backend test failed."
-            );
-
-          }
-
-
-          /*
-          |--------------------------------------------------------------------------
-          | Success
-          |--------------------------------------------------------------------------
-          */
-
-          showResult(
-            "<strong>✓ Backend connection successful</strong><br><br>" +
-
-            "Selected fund amount: " +
-            formatKES(fundAmount) +
-
-            "<br>" +
-
-            "Amount payable now: " +
-            formatKES(processingFee) +
-
-            "<br><br>" +
-
-            "Reference: " +
-            (
-              data.reference ||
-              "TEST-" + Date.now()
-            ) +
-
-            "<br><br>" +
-
-            "No M-Pesa payment was initiated."
-          );
-
-        } catch (error) {
-
-          console.error(
-            "Payment test error:",
-            error
-          );
-
-          showResult(
-            "<strong>Connection test failed</strong><br><br>" +
-            error.message,
-            true
-          );
-
-        } finally {
-
-          testButton.disabled =
-            false;
-
-          testButton.textContent =
-            "Test Payment Connection";
-
-        }
-
+        status.textContent =
+          data.message || "Check your phone and complete the M-PESA prompt.";
+      } catch (error) {
+        status.textContent =
+          "Payment service is not connected yet. Configure the server-side M-PESA credentials first.";
       }
-    );
-
+    });
   </script>
-
 </body>
 </html>
