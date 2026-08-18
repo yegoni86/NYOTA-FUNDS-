@@ -2,92 +2,130 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Select Fund Amount</title>
 
 <style>
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',Arial,sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
     background:linear-gradient(135deg,#0B7A2F,#2563EB);
-    padding:20px;
+    padding:10px;
+    min-height:100vh;
 }
 
 .container{
-    max-width:650px;
+    width:100%;
+    max-width:500px;
     margin:auto;
     background:#fff;
-    border-radius:18px;
+    border-radius:14px;
     overflow:hidden;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    box-shadow:0 8px 20px #0003;
 }
 
 .header{
     background:linear-gradient(135deg,#0B7A2F,#2563EB);
     color:#fff;
     text-align:center;
-    padding:30px;
+    padding:18px 10px;
+}
+
+.header h1{
+    font-size:23px;
 }
 
 .content{
-    padding:25px;
+    padding:15px;
 }
 
 .message{
     background:#F0FDF4;
-    border-left:5px solid #16A34A;
-    padding:18px;
-    border-radius:10px;
-    margin-bottom:25px;
+    border-left:4px solid #16A34A;
+    padding:13px;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+
+.message h3{
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.message p{
+    font-size:14px;
 }
 
 .option{
     display:flex;
     align-items:center;
-    padding:15px;
-    margin-bottom:12px;
-    border:2px solid #e5e7eb;
-    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:8px;
+    border:2px solid #ddd;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:700;
+    min-height:50px;
     cursor:pointer;
 }
 
 .option:hover{
     border-color:#16A34A;
-    background:#F8FFFA;
+    background:#F0FDF4;
 }
 
 .option input{
-    margin-right:15px;
-    transform:scale(1.2);
+    margin-right:13px;
+    transform:scale(1.4);
+    accent-color:#16A34A;
 }
 
+.option:has(input:checked){
+    border-color:#16A34A;
+    background:#F0FDF4;
+}
+
+/* SUMMARY BOX */
 .summary{
-    margin-top:25px;
-    padding:20px;
+    margin-top:15px;
+    padding:18px;
     background:#F9FAFB;
-    border-radius:12px;
+    border-radius:10px;
+    border:2px solid #e5e7eb;
 }
 
 .summary p{
-    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+    font-size:15px;
 }
 
 .summary p:last-child{
     margin-bottom:0;
 }
 
+/* LARGE SELECTED NUMBERS */
+.summary span{
+    font-size:24px;
+    font-weight:800;
+    color:#0B7A2F;
+    white-space:nowrap;
+}
+
 button{
     width:100%;
-    padding:16px;
-    margin-top:20px;
-    border:none;
-    border-radius:12px;
+    padding:14px;
+    margin-top:15px;
+    border:0;
+    border-radius:9px;
     background:linear-gradient(135deg,#16A34A,#0B7A2F);
     color:#fff;
     font-size:18px;
@@ -95,11 +133,40 @@ button{
     cursor:pointer;
 }
 
+button:active{
+    transform:scale(.98);
+}
+
 .footer{
     text-align:center;
-    padding:20px;
+    padding:12px;
     color:#666;
-    font-size:14px;
+    font-size:12px;
+}
+
+/* SMALL PHONE SCREENS */
+@media(max-width:360px){
+
+    .header h1{
+        font-size:20px;
+    }
+
+    .content{
+        padding:12px;
+    }
+
+    .option{
+        font-size:18px;
+        padding:10px;
+    }
+
+    .summary span{
+        font-size:21px;
+    }
+
+    .summary p{
+        font-size:14px;
+    }
 }
 </style>
 </head>
@@ -119,105 +186,50 @@ button{
             <p>Please select the amount you wish to apply for.</p>
         </div>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="22000"
-                data-fee="1"
-            >
+            <input type="radio" name="amount" value="22000" data-fee="1">
             Ksh 22,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="30000"
-                data-fee="450"
-            >
+            <input type="radio" name="amount" value="30000" data-fee="450">
             Ksh 30,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="40000"
-                data-fee="550"
-            >
+            <input type="radio" name="amount" value="40000" data-fee="550">
             Ksh 40,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="50000"
-                data-fee="650"
-            >
+            <input type="radio" name="amount" value="50000" data-fee="650">
             Ksh 50,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="65000"
-                data-fee="800"
-            >
+            <input type="radio" name="amount" value="65000" data-fee="800">
             Ksh 65,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="75000"
-                data-fee="900"
-            >
+            <input type="radio" name="amount" value="75000" data-fee="900">
             Ksh 75,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="85000"
-                data-fee="1000"
-            >
+            <input type="radio" name="amount" value="85000" data-fee="1000">
             Ksh 85,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="110000"
-                data-fee="1200"
-            >
+            <input type="radio" name="amount" value="110000" data-fee="1200">
             Ksh 110,000
         </label>
 
-
         <label class="option">
-            <input
-                type="radio"
-                name="amount"
-                value="150000"
-                data-fee="1500"
-            >
+            <input type="radio" name="amount" value="150000" data-fee="1500">
             Ksh 150,000
         </label>
-
 
         <div class="summary">
 
@@ -227,22 +239,17 @@ button{
             </p>
 
             <p>
-                <strong>Demo Processing Fee:</strong>
+                <strong>Processing Fee:</strong>
                 <span id="fee">Ksh ---</span>
             </p>
 
         </div>
 
-
-        <button
-            type="button"
-            id="continueButton"
-        >
+        <button type="button" id="continueButton">
             Continue →
         </button>
 
     </div>
-
 
     <div class="footer">
         Demo application interface
@@ -250,74 +257,65 @@ button{
 
 </div>
 
-
 <script>
 
 const radios =
-    document.querySelectorAll(
-        'input[name="amount"]'
-    );
+    document.querySelectorAll('input[name="amount"]');
+
+const selected =
+    document.getElementById("selected");
+
+const fee =
+    document.getElementById("fee");
+
+const continueButton =
+    document.getElementById("continueButton");
 
 let amount = "";
-let fee = "";
-
+let processingFee = "";
 
 radios.forEach(function(radio){
 
     radio.addEventListener("change",function(){
 
         amount = this.value;
-        fee = this.dataset.fee;
+        processingFee = this.dataset.fee;
 
-        document.getElementById("selected")
-            .textContent =
+        selected.textContent =
             "Ksh " +
             Number(amount).toLocaleString();
 
-        document.getElementById("fee")
-            .textContent =
+        fee.textContent =
             "Ksh " +
-            Number(fee).toLocaleString();
+            Number(processingFee).toLocaleString();
 
     });
 
 });
 
+continueButton.addEventListener("click",function(){
 
-document.getElementById("continueButton")
-    .addEventListener("click",function(){
+    if(amount === ""){
 
-        if(amount === ""){
+        alert("Please select an amount.");
 
-            alert(
-                "Please select an amount."
-            );
+        return;
+    }
 
-            return;
-        }
+    localStorage.setItem(
+        "loanAmount",
+        amount
+    );
 
+    localStorage.setItem(
+        "processingFee",
+        processingFee
+    );
 
-        localStorage.setItem(
-            "loanAmount",
-            amount
-        );
+    window.location.href =
+        "payment.html";
 
-
-        localStorage.setItem(
-            "processingFee",
-            fee
-        );
-
-
-        /*
-         * Change this to the filename
-         * of your next page.
-         */
-
-        window.location.href =
-            "payment.html";
-
-    });
+});
 
 </script>
 
