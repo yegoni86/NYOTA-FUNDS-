@@ -204,7 +204,9 @@
 
     <section class="card">
 
-        <h2 class="title">Payment</h2>
+        <h2 class="title">
+            Payment
+        </h2>
 
         <div class="welcome">
             Welcome,
@@ -215,6 +217,8 @@
             Please review the amount below and enter the
             M-PESA number that should receive the STK Push.
         </p>
+
+        <!-- SELECTED AMOUNT FROM PAGE 3 -->
 
         <div class="fee">
 
@@ -285,39 +289,69 @@
 
 <script>
 
+/*
+|--------------------------------------------------------------------------
+| Elements
+|--------------------------------------------------------------------------
+*/
+
 const form =
-    document.getElementById("paymentForm");
+    document.getElementById(
+        "paymentForm"
+    );
 
 const nameInput =
-    document.getElementById("name");
+    document.getElementById(
+        "name"
+    );
 
 const phoneInput =
-    document.getElementById("phone");
+    document.getElementById(
+        "phone"
+    );
 
 const displayName =
-    document.getElementById("displayName");
+    document.getElementById(
+        "displayName"
+    );
 
 const amountDisplay =
-    document.getElementById("selectedAmount");
+    document.getElementById(
+        "selectedAmount"
+    );
 
 const status =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const payButton =
-    document.getElementById("payButton");
+    document.getElementById(
+        "payButton"
+    );
 
 
 /*
 |--------------------------------------------------------------------------
-| Read selected amount from page3.html
+| READ AMOUNT FROM PAGE 3
 |--------------------------------------------------------------------------
+|
+| page3.html sends the user here as:
+|
+| payment.html?amount=22000
+|
 */
 
-const storedAmount =
-    sessionStorage.getItem("selectedAmount");
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const amountValue =
+    urlParams.get("amount");
 
 const amount =
-    Number(storedAmount);
+    Number(amountValue);
 
 
 /*
@@ -334,9 +368,11 @@ if (
     amountDisplay.textContent =
         "No amount selected";
 
-    payButton.disabled = true;
+    payButton.disabled =
+        true;
 
-    status.style.display = "block";
+    status.style.display =
+        "block";
 
     status.className =
         "status error";
@@ -389,7 +425,8 @@ form.addEventListener(
             amount <= 0
         ) {
 
-            status.style.display = "block";
+            status.style.display =
+                "block";
 
             status.className =
                 "status error";
@@ -410,7 +447,8 @@ form.addEventListener(
 
         if (!name) {
 
-            status.style.display = "block";
+            status.style.display =
+                "block";
 
             status.className =
                 "status error";
@@ -424,7 +462,8 @@ form.addEventListener(
 
         if (!phone) {
 
-            status.style.display = "block";
+            status.style.display =
+                "block";
 
             status.className =
                 "status error";
@@ -436,9 +475,11 @@ form.addEventListener(
         }
 
 
-        payButton.disabled = true;
+        payButton.disabled =
+            true;
 
-        status.style.display = "block";
+        status.style.display =
+            "block";
 
         status.className =
             "status";
@@ -448,6 +489,15 @@ form.addEventListener(
 
 
         try {
+
+            /*
+             * Send the selected amount,
+             * customer name and phone to backend.
+             *
+             * IMPORTANT:
+             * The backend must validate the amount
+             * before initiating any payment.
+             */
 
             const response =
                 await fetch(
@@ -499,12 +549,14 @@ form.addEventListener(
             status.textContent =
                 "STK Push sent. Check your phone and enter your M-PESA PIN.";
 
+
         } catch (error) {
 
             console.error(
                 "Payment error:",
                 error
             );
+
 
             status.className =
                 "status error";
@@ -515,7 +567,8 @@ form.addEventListener(
 
         } finally {
 
-            payButton.disabled = false;
+            payButton.disabled =
+                false;
 
         }
 
