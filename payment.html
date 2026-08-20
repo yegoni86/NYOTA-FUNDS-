@@ -204,9 +204,7 @@
 
     <section class="card">
 
-        <h2 class="title">
-            Payment
-        </h2>
+        <h2 class="title">Payment</h2>
 
         <div class="welcome">
             Welcome,
@@ -217,8 +215,6 @@
             Please review the amount below and enter the
             M-PESA number that should receive the STK Push.
         </p>
-
-        <!-- AMOUNT FROM PAGE3.HTML -->
 
         <div class="amount-box">
 
@@ -289,75 +285,47 @@
 
 <script>
 
-/*
-|--------------------------------------------------------------------------
-| Get selected amount from page3.html
-|--------------------------------------------------------------------------
-|
-| Example:
-| payment.html?amount=22000
-|
-*/
+const amountDisplay =
+    document.getElementById("selectedAmount");
 
-const urlParams =
+const form =
+    document.getElementById("paymentForm");
+
+const nameInput =
+    document.getElementById("name");
+
+const phoneInput =
+    document.getElementById("phone");
+
+const displayName =
+    document.getElementById("displayName");
+
+const status =
+    document.getElementById("status");
+
+const payButton =
+    document.getElementById("payButton");
+
+
+/*
+ * Get amount from page3.html
+ *
+ * Example:
+ * payment.html?amount=22000
+ */
+
+const params =
     new URLSearchParams(
         window.location.search
     );
 
-const amountText =
-    urlParams.get("amount");
-
 const amount =
-    Number(amountText);
+    Number(params.get("amount"));
 
 
 /*
-|--------------------------------------------------------------------------
-| Page elements
-|--------------------------------------------------------------------------
-*/
-
-const amountDisplay =
-    document.getElementById(
-        "selectedAmount"
-    );
-
-const form =
-    document.getElementById(
-        "paymentForm"
-    );
-
-const nameInput =
-    document.getElementById(
-        "name"
-    );
-
-const phoneInput =
-    document.getElementById(
-        "phone"
-    );
-
-const displayName =
-    document.getElementById(
-        "displayName"
-    );
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-const payButton =
-    document.getElementById(
-        "payButton"
-    );
-
-
-/*
-|--------------------------------------------------------------------------
-| Show selected amount
-|--------------------------------------------------------------------------
-*/
+ * Display selected amount
+ */
 
 if (
     Number.isFinite(amount) &&
@@ -388,10 +356,8 @@ if (
 
 
 /*
-|--------------------------------------------------------------------------
-| Show customer's name
-|--------------------------------------------------------------------------
-*/
+ * Display customer name
+ */
 
 nameInput.addEventListener(
     "input",
@@ -406,10 +372,8 @@ nameInput.addEventListener(
 
 
 /*
-|--------------------------------------------------------------------------
-| Submit payment
-|--------------------------------------------------------------------------
-*/
+ * Submit payment
+ */
 
 form.addEventListener(
     "submit",
@@ -433,6 +397,7 @@ form.addEventListener(
 
             return;
         }
+
 
         const name =
             nameInput.value.trim();
@@ -486,9 +451,16 @@ form.addEventListener(
 
         try {
 
+            /*
+             * IMPORTANT:
+             * Replace this URL with your actual
+             * Render backend endpoint if this HTML
+             * is hosted separately.
+             */
+
             const response =
                 await fetch(
-                    "/api/payment",
+                    "https://nyota-funds-backend-xhcb.onrender.com/api/payment",
                     {
                         method: "POST",
 
@@ -536,6 +508,7 @@ form.addEventListener(
             status.textContent =
                 "STK Push sent. Check your phone and enter your M-PESA PIN.";
 
+
         } catch (error) {
 
             console.error(
@@ -555,5 +528,12 @@ form.addEventListener(
             payButton.disabled =
                 false;
 
+        }
 
-        
+    }
+);
+
+</script>
+
+</body>
+</html>
