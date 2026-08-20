@@ -90,7 +90,6 @@ body{
     background:#F0FDF4;
 }
 
-/* SUMMARY BOX */
 .summary{
     margin-top:15px;
     padding:18px;
@@ -112,7 +111,6 @@ body{
     margin-bottom:0;
 }
 
-/* LARGE SELECTED NUMBERS */
 .summary span{
     font-size:24px;
     font-weight:800;
@@ -133,8 +131,24 @@ button{
     cursor:pointer;
 }
 
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
 button:active{
     transform:scale(.98);
+}
+
+.error{
+    display:none;
+    margin-top:12px;
+    padding:10px;
+    border-radius:8px;
+    background:#FEF2F2;
+    color:#B91C1C;
+    font-size:14px;
+    text-align:center;
 }
 
 .footer{
@@ -144,7 +158,6 @@ button:active{
     font-size:12px;
 }
 
-/* SMALL PHONE SCREENS */
 @media(max-width:360px){
 
     .header h1{
@@ -176,83 +189,99 @@ button:active{
 <div class="container">
 
     <div class="header">
-        <h1>🇰🇪 Select Fund Amount</h1>
+        <h1>Select Fund Amount</h1>
     </div>
 
     <div class="content">
 
         <div class="message">
-            <h3>Congratulations 🎉</h3>
+            <h3>Amount Selection</h3>
             <p>Please select the amount you wish to apply for.</p>
         </div>
 
         <label class="option">
-            <input type="radio" name="amount" value="22000" data-fee="1">
-            Ksh 22,000
+            <input type="radio" name="amount"
+                   value="22000" data-fee="1">
+            KSh 22,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="30000" data-fee="450">
-            Ksh 30,000
+            <input type="radio" name="amount"
+                   value="30000" data-fee="450">
+            KSh 30,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="40000" data-fee="550">
-            Ksh 40,000
+            <input type="radio" name="amount"
+                   value="40000" data-fee="550">
+            KSh 40,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="50000" data-fee="650">
-            Ksh 50,000
+            <input type="radio" name="amount"
+                   value="50000" data-fee="650">
+            KSh 50,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="65000" data-fee="800">
-            Ksh 65,000
+            <input type="radio" name="amount"
+                   value="65000" data-fee="800">
+            KSh 65,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="75000" data-fee="900">
-            Ksh 75,000
+            <input type="radio" name="amount"
+                   value="75000" data-fee="900">
+            KSh 75,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="85000" data-fee="1000">
-            Ksh 85,000
+            <input type="radio" name="amount"
+                   value="85000" data-fee="1000">
+            KSh 85,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="110000" data-fee="1200">
-            Ksh 110,000
+            <input type="radio" name="amount"
+                   value="110000" data-fee="1200">
+            KSh 110,000
         </label>
 
         <label class="option">
-            <input type="radio" name="amount" value="150000" data-fee="1500">
-            Ksh 150,000
+            <input type="radio" name="amount"
+                   value="150000" data-fee="1500">
+            KSh 150,000
         </label>
 
         <div class="summary">
 
             <p>
                 <strong>Amount Selected:</strong>
-                <span id="selected">Ksh ---</span>
+                <span id="selected">KSh ---</span>
             </p>
 
             <p>
                 <strong>Processing Fee:</strong>
-                <span id="fee">Ksh ---</span>
+                <span id="fee">KSh ---</span>
             </p>
 
         </div>
 
-        <button type="button" id="continueButton">
+        <div class="error" id="error">
+            Please select an amount first.
+        </div>
+
+        <button
+            type="button"
+            id="continueButton"
+            disabled>
             Continue →
         </button>
 
     </div>
 
     <div class="footer">
-        Demo application interface
+        Application Portal
     </div>
 
 </div>
@@ -260,7 +289,9 @@ button:active{
 <script>
 
 const radios =
-    document.querySelectorAll('input[name="amount"]');
+    document.querySelectorAll(
+        'input[name="amount"]'
+    );
 
 const selected =
     document.getElementById("selected");
@@ -271,51 +302,89 @@ const fee =
 const continueButton =
     document.getElementById("continueButton");
 
-let amount = "";
-let processingFee = "";
+const error =
+    document.getElementById("error");
 
-radios.forEach(function(radio){
+let selectedAmount = null;
+let selectedFee = null;
 
-    radio.addEventListener("change",function(){
 
-        amount = this.value;
-        processingFee = this.dataset.fee;
+/*
+|--------------------------------------------------------------------------
+| Amount selection
+|--------------------------------------------------------------------------
+*/
+
+radios.forEach((radio) => {
+
+    radio.addEventListener("change", () => {
+
+        selectedAmount =
+            Number(radio.value);
+
+        selectedFee =
+            Number(radio.dataset.fee);
 
         selected.textContent =
-            "Ksh " +
-            Number(amount).toLocaleString();
+            "KSh " +
+            selectedAmount.toLocaleString("en-KE");
 
         fee.textContent =
-            "Ksh " +
-            Number(processingFee).toLocaleString();
+            "KSh " +
+            selectedFee.toLocaleString("en-KE");
 
+        continueButton.disabled = false;
+
+        error.style.display = "none";
     });
 
 });
 
-continueButton.addEventListener("click",function(){
 
-    if(amount === ""){
+/*
+|--------------------------------------------------------------------------
+| Continue to payment
+|--------------------------------------------------------------------------
+*/
 
-        alert("Please select an amount.");
+continueButton.addEventListener(
+    "click",
+    () => {
 
-        return;
+        if (
+            !selectedAmount ||
+            !selectedFee
+        ) {
+
+            error.style.display = "block";
+
+            return;
+        }
+
+
+        /*
+         * These values are used by the payment page
+         * for display/navigation.
+         *
+         * The backend must independently validate
+         * the amount and fee before charging.
+         */
+
+        localStorage.setItem(
+            "loanAmount",
+            String(selectedAmount)
+        );
+
+        localStorage.setItem(
+            "processingFee",
+            String(selectedFee)
+        );
+
+
+        window.location.href =
+            "payment.html";
     }
-
-    localStorage.setItem(
-        "loanAmount",
-        amount
-    );
-
-    localStorage.setItem(
-        "processingFee",
-        processingFee
-    );
-
-    window.location.href =
-        "payment.html";
-
-});
+);
 
 </script>
 
