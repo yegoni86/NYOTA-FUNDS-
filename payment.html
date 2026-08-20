@@ -1,213 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Processing Fee</title>
-  <style>
-    :root{
-      --bg:#07596b;
-      --bg2:#0b6475;
-      --card:#ffffff;
-      --text:#172033;
-      --muted:#687486;
-      --green:#14834a;
-      --line:#e1e5e8;
-      --button:#07596b;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      background:var(--bg);
-      font-family:Arial,Helvetica,sans-serif;
-      color:var(--text);
-    }
-    .page{
-      width:100%;
-      max-width:620px;
-      margin:auto;
-      padding:30px 16px 60px;
-    }
-    .top{
-      text-align:center;
-      color:#fff;
-      margin-bottom:26px;
-    }
-    .top h1{
-      margin:0;
-      font-size:34px;
-      font-weight:800;
-    }
-    .top p{
-      margin:10px 0 0;
-      font-size:17px;
-      opacity:.9;
-    }
-    .card{
-      background:var(--card);
-      border-radius:30px;
-      padding:34px 28px 38px;
-      box-shadow:0 18px 45px rgba(0,0,0,.22);
-    }
-    .title{
-      text-align:center;
-      font-size:30px;
-      font-weight:800;
-      margin:0 0 22px;
-    }
-    .welcome{
-      text-align:center;
-      font-size:19px;
-      margin-bottom:25px;
-    }
-    .intro{
-      text-align:center;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:17px;
-      margin:0 auto 28px;
-    }
-    .fee{
-      border:1px solid #b8ded0;
-      background:#eef9f4;
-      border-radius:20px;
-      padding:22px 18px;
-      text-align:center;
-      margin-bottom:28px;
-    }
-    .fee-label{
-      color:var(--muted);
-      font-size:16px;
-      margin-bottom:6px;
-    }
-    .fee-value{
-      color:var(--green);
-      font-size:35px;
-      font-weight:800;
-    }
-    label{
-      display:block;
-      font-size:16px;
-      font-weight:800;
-      margin:0 0 9px;
-    }
-    input{
-      width:100%;
-      padding:16px 17px;
-      border:2px solid var(--line);
-      border-radius:15px;
-      font-size:16px;
-      outline:none;
-      margin-bottom:21px;
-    }
-    input:focus{border-color:var(--bg)}
-    button{
-      width:100%;
-      padding:17px;
-      border:0;
-      border-radius:15px;
-      background:var(--button);
-      color:#fff;
-      font-size:17px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    button:hover{background:var(--bg2)}
-    .status{
-      display:none;
-      margin-top:16px;
-      padding:13px;
-      border-radius:12px;
-      background:#eef9f4;
-      color:var(--green);
-      text-align:center;
-      font-weight:700;
-    }
-    @media(max-width:480px){
-      .page{padding:24px 12px 45px}
-      .card{padding:30px 21px 34px}
-      .top h1{font-size:30px}
-      .title{font-size:28px}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment</title>
+
+    <style>
+        :root {
+            --bg: #07596b;
+            --bg2: #0b6475;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #687486;
+            --green: #14834a;
+            --line: #e1e5e8;
+            --button: #07596b;
+            --error: #b42318;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+        }
+
+        .page {
+            width: 100%;
+            max-width: 620px;
+            margin: auto;
+            padding: 30px 16px 60px;
+        }
+
+        .top {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 26px;
+        }
+
+        .top h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .top p {
+            margin: 10px 0 0;
+            font-size: 17px;
+            opacity: .9;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 30px;
+            padding: 34px 28px 38px;
+            box-shadow: 0 18px 45px rgba(0,0,0,.22);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 800;
+            margin: 0 0 22px;
+        }
+
+        .welcome {
+            text-align: center;
+            font-size: 19px;
+            margin-bottom: 25px;
+        }
+
+        .intro {
+            text-align: center;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 17px;
+            margin: 0 auto 28px;
+        }
+
+        .fee {
+            border: 1px solid #b8ded0;
+            background: #eef9f4;
+            border-radius: 20px;
+            padding: 22px 18px;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .fee-label {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .fee-value {
+            color: var(--green);
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0 0 9px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 17px;
+            border: 2px solid var(--line);
+            border-radius: 15px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 21px;
+        }
+
+        input:focus {
+            border-color: var(--bg);
+        }
+
+        button {
+            width: 100%;
+            padding: 17px;
+            border: 0;
+            border-radius: 15px;
+            background: var(--button);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--bg2);
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            display: none;
+            margin-top: 16px;
+            padding: 13px;
+            border-radius: 12px;
+            background: #eef9f4;
+            color: var(--green);
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .status.error {
+            background: #fef3f2;
+            color: var(--error);
+        }
+
+        .back {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        @media(max-width:480px) {
+            .page {
+                padding: 24px 12px 45px;
+            }
+
+            .card {
+                padding: 30px 21px 34px;
+            }
+
+            .top h1 {
+                font-size: 30px;
+            }
+
+            .title {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <main class="page">
+
+<main class="page">
+
     <header class="top">
-      <h1>Payment</h1>
-      <p>Secure checkout</p>
+        <h1>Payment</h1>
+        <p>Secure checkout</p>
     </header>
 
     <section class="card">
-      <h2 class="title">Processing Fee</h2>
 
-      <div class="welcome">
-        Welcome, <strong id="displayName">Customer</strong>
-      </div>
+        <h2 class="title">
+            Payment
+        </h2>
 
-      <p class="intro">
-        Please review the payment details below and enter your information to continue.
-      </p>
+        <div class="welcome">
+            Welcome, <strong id="displayName">Customer</strong>
+        </div>
 
-      <div class="fee">
-        <div class="fee-label">Processing Fee</div>
-        <div class="fee-value">KSh 350</div>
-      </div>
+        <p class="intro">
+            Please review the amount below and enter the
+            M-PESA number that should receive the STK Push.
+        </p>
 
-      <form id="paymentForm">
-        <label for="name">Full Name</label>
-        <input id="name" type="text" placeholder="Enter your full name" required>
+        <!-- SELECTED AMOUNT -->
 
-        <label for="phone">M-PESA Phone Number</label>
-        <input id="phone" type="tel" inputmode="numeric"
-               placeholder="2547XXXXXXXX" required>
+        <div class="fee">
 
-        <button type="submit">Pay Processing Fee</button>
-        <div class="status" id="status"></div>
-      </form>
+            <div class="fee-label">
+                Amount Selected
+            </div>
+
+            <div
+                class="fee-value"
+                id="selectedAmount"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+        <form id="paymentForm">
+
+            <label for="name">
+                Full Name
+            </label>
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
+
+            <label for="phone">
+                M-PESA Phone Number
+            </label>
+
+            <input
+                id="phone"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                placeholder="0712345678"
+                required
+            >
+
+            <button
+                id="payButton"
+                type="submit"
+            >
+                Pay Now
+            </button>
+
+            <div
+                class="status"
+                id="status"
+            ></div>
+
+        </form>
+
+        <a
+            class="back"
+            href="page3.html"
+        >
+            ← Back to amount selection
+        </a>
+
     </section>
-  </main>
 
-  <script>
-    const form = document.getElementById("paymentForm");
-    const nameInput = document.getElementById("name");
-    const displayName = document.getElementById("displayName");
-    const status = document.getElementById("status");
+</main>
 
-    nameInput.addEventListener("input", () => {
-      displayName.textContent = nameInput.value.trim() || "Customer";
-    });
+<script>
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+const form =
+    document.getElementById("paymentForm");
 
-      status.style.display = "block";
-      status.textContent = "Starting secure payment...";
+const nameInput =
+    document.getElementById("name");
 
-      try {
-        const response = await fetch("/api/mpesa/stkpush", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            phone: document.getElementById("phone").value.trim(),
-            amount: 350
-          })
-        });
+const phoneInput =
+    document.getElementById("phone");
 
-        const data = await response.json();
+const displayName =
+    document.getElementById("displayName");
 
-        if (!response.ok) {
-          throw new Error(data.error || "Unable to start payment.");
+const amountDisplay =
+    document.getElementById("selectedAmount");
+
+const status =
+    document.getElementById("status");
+
+const payButton =
+    document.getElementById("payButton");
+
+
+/*
+|--------------------------------------------------------------------------
+| Get amount selected on page3.html
+|--------------------------------------------------------------------------
+*/
+
+const amount =
+    Number(
+        sessionStorage.getItem("selectedAmount")
+    );
+
+
+/*
+|--------------------------------------------------------------------------
+| Display selected amount
+|--------------------------------------------------------------------------
+*/
+
+if (!Number.isFinite(amount) || amount <= 0) {
+
+    amountDisplay.textContent =
+        "No amount selected";
+
+    payButton.disabled = true;
+
+    status.style.display = "block";
+
+    status.className = "status error";
+
+    status.textContent =
+        "Please return to the previous page and select an amount.";
+
+} else {
+
+    amountDisplay.textContent =
+        "KSh " +
+        amount.toLocaleString("en-KE");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Display customer's name
+|--------------------------------------------------------------------------
+*/
+
+nameInput.addEventListener(
+    "input",
+    () => {
+
+        displayName.textContent =
+            nameInput.value.trim() ||
+            "Customer";
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Submit payment
+|--------------------------------------------------------------------------
+*/
+
+form.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+
+            status.style.display = "block";
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "No valid amount was selected.";
+
+            return;
         }
 
+        const name =
+            nameInput.value.trim();
+
+        const phone =
+            phoneInput.value.trim();
+
+
+        if (!name) {
+
+            status.style.display = "block";
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Please enter your full name.";
+
+            return;
+        }
+
+
+        if (!phone) {
+
+            status.style.display = "block";
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Please enter your M-PESA number.";
+
+            return;
+        }
+
+
+        payButton.disabled = true;
+
+        status.style.display = "block";
+
+        status.className = "status";
+
         status.textContent =
-          data.message || "Check your phone and complete the M-PESA prompt.";
-      } catch (error) {
-        status.textContent =
-          "Payment service is not connected yet. Configure the server-side M-PESA credentials first.";
-      }
-    });
-  </script>
+            "Sending M-PESA STK Push...";
+
+
+        try {
+
+            /*
+             * The frontend sends the selected amount
+             * for display/reference purposes.
+             *
+             * Your backend MUST validate the amount
+             * before charging the customer.
+             */
+
+            const response =
+                await fetch(
+                    "/api/payment",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            phone: phone,
+
+                            amount: amount,
+
+                            description:
+                                "Authorized payment"
+
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Payment response:",
+                data
+            );
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to initiate payment."
+                );
+
+            }
+
+
+            status.className =
+                "status";
+
+            status.textContent =
+                "STK Push sent. Check your phone and enter your M-PESA PIN.";
+
+
+        } catch (error) {
+
+            console.error(
+                "Payment error:",
+                error
+            );
+
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                error.message ||
+                "Payment request failed.";
+
+        } finally {
+
+            payButton.disabled = false;
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>
