@@ -204,20 +204,17 @@
 
     <section class="card">
 
-        <h2 class="title">
-            Payment
-        </h2>
+        <h2 class="title">Payment</h2>
 
         <div class="welcome">
-            Welcome, <strong id="displayName">Customer</strong>
+            Welcome,
+            <strong id="displayName">Customer</strong>
         </div>
 
         <p class="intro">
             Please review the amount below and enter the
             M-PESA number that should receive the STK Push.
         </p>
-
-        <!-- SELECTED AMOUNT -->
 
         <div class="fee">
 
@@ -312,14 +309,15 @@ const payButton =
 
 /*
 |--------------------------------------------------------------------------
-| Get amount selected on page3.html
+| Read selected amount from page3.html
 |--------------------------------------------------------------------------
 */
 
+const storedAmount =
+    sessionStorage.getItem("selectedAmount");
+
 const amount =
-    Number(
-        sessionStorage.getItem("selectedAmount")
-    );
+    Number(storedAmount);
 
 
 /*
@@ -328,7 +326,10 @@ const amount =
 |--------------------------------------------------------------------------
 */
 
-if (!Number.isFinite(amount) || amount <= 0) {
+if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+) {
 
     amountDisplay.textContent =
         "No amount selected";
@@ -337,7 +338,8 @@ if (!Number.isFinite(amount) || amount <= 0) {
 
     status.style.display = "block";
 
-    status.className = "status error";
+    status.className =
+        "status error";
 
     status.textContent =
         "Please return to the previous page and select an amount.";
@@ -381,7 +383,11 @@ form.addEventListener(
 
         event.preventDefault();
 
-        if (!Number.isFinite(amount) || amount <= 0) {
+
+        if (
+            !Number.isFinite(amount) ||
+            amount <= 0
+        ) {
 
             status.style.display = "block";
 
@@ -393,6 +399,7 @@ form.addEventListener(
 
             return;
         }
+
 
         const name =
             nameInput.value.trim();
@@ -433,21 +440,14 @@ form.addEventListener(
 
         status.style.display = "block";
 
-        status.className = "status";
+        status.className =
+            "status";
 
         status.textContent =
             "Sending M-PESA STK Push...";
 
 
         try {
-
-            /*
-             * The frontend sends the selected amount
-             * for display/reference purposes.
-             *
-             * Your backend MUST validate the amount
-             * before charging the customer.
-             */
 
             const response =
                 await fetch(
@@ -461,6 +461,8 @@ form.addEventListener(
                         },
 
                         body: JSON.stringify({
+
+                            name: name,
 
                             phone: phone,
 
@@ -476,12 +478,6 @@ form.addEventListener(
 
             const data =
                 await response.json();
-
-
-            console.log(
-                "Payment response:",
-                data
-            );
 
 
             if (
@@ -503,14 +499,12 @@ form.addEventListener(
             status.textContent =
                 "STK Push sent. Check your phone and enter your M-PESA PIN.";
 
-
         } catch (error) {
 
             console.error(
                 "Payment error:",
                 error
             );
-
 
             status.className =
                 "status error";
